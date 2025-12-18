@@ -1,24 +1,33 @@
+/* App-level typography aligned with nbv-basketball.de */
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  text-align: left;
+  color: #001d33;
 }
 
-p{
-  color: white;
+p {
+  color: #001d33;
 }
 
-h1,h2,h3,h4,h5,h6{
-  color: whitesmoke;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #001d33;
 }
 
-body, strong{
-  color: white;
+body,
+strong {
+  color: #001d33;
 }
+
 .bg-darker {
-  color: #2c3e50;
+  color: #001d33;
 }
 .nocturnal {
   border: 1px solid #435169 !important;
@@ -43,27 +52,41 @@ input[type="checkbox"][disabled]{
  border: none !important;
 }
 
-.vgt-table tbody tr{
-  background: linear-gradient(135deg, #2c394f9f, #2c394fa1) !important;
+/* Vue Good Table styling adapted to NBV colors */
+.vgt-table tbody tr {
+  background-color: #ffffff !important;
 }
 
-
-.vgt-table thead tr th{
-  background: transparent !important;
+.vgt-table tbody tr:nth-child(even) {
+  background-color: #f5f6f8 !important;
 }
- .vgt-table thead, .vgt-wrap__footer{
+
+.vgt-table tbody td {
+  color: #001d33 !important;
+}
+
+.vgt-table thead tr th {
+  background: #001d33 !important;
+  color: #ffffff !important;
+}
+
+.vgt-table thead,
+.vgt-wrap__footer {
   margin: 20px 0;
-  background:  var(--bs-dark) !important;
+  background: #ffffff !important;
   border-radius: 10px;
+  border: 1px solid #d5d9e0 !important;
 }
 
-.vgt-inner-wrap{
+.vgt-inner-wrap {
   background: transparent !important;
   border: none !important;
 }
-.vgt-responsive,.vgt-table{
+
+.vgt-responsive,
+.vgt-table {
   border-radius: 10px;
-  border: 1px solid #435169 !important;
+  border: 1px solid #d5d9e0 !important;
 }
 
 
