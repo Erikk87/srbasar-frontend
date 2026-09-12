@@ -78,8 +78,7 @@ temp/
 .storybook-out
 
 # Vite
-.vite/ 
-package-lock.json
+.vite/
 yarn.lock
 # Sentry Config File
 .env.sentry-build-plugin
