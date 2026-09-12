@@ -57,7 +57,7 @@ Wir freuen uns über Beiträge zur Verbesserung des Projekts:
 - **Bootstrap 5.3.7**: CSS Framework
 - **Font Awesome 7.0.0**: Icon Library
 - **Vue Router 4.5.1**: Client-side Routing
-- **Vuex 4.1.0**: State Management
+- **Pinia 3.0.3**: State Management
 - **Tabulator Tables 6.3.1**: Erweiterte Tabellen-Funktionalität
 - **Axios 1.11.0**: HTTP Client
 - **Date-fns 4.1.0**: Datums-Utilities
@@ -325,7 +325,7 @@ VITE_ENABLE_DEBUG_MODE=true npm run dev
 - Vue Multiselect für Auswahl-Felder
 - Font Awesome 7.0.0 für Icons
 - Modulare Service-Struktur
-- Vuex 4.1.0 für State Management
+- Pinia 3.0.3 für State Management
 - Umgebungsvariablen-Konfiguration
 - ESLint für Code-Qualität
 
