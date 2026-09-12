@@ -6,3 +6,8 @@
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
 </IfModule>
+
+<IfModule mod_headers.c>
+  Header set Content-Security-Policy "frame-ancestors 'self' https://nbbv.de https://www.nbbv.de"
+  Header set X-Frame-Options "ALLOW-FROM https://nbbv.de"
+</IfModule>

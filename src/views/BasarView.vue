@@ -42,7 +42,7 @@
                 </span>
               </div>
               <button 
-                class="btn btn-outline-light btn-sm"
+                class="btn btn-outline-secondary btn-sm"
                 @click="manualUpdate"
                 :disabled="loading"
               >
@@ -62,6 +62,11 @@ import { ref, onMounted, onUnmounted, computed, h, createApp } from 'vue'
 import BasarList from "../components/BasarList.vue";
 import GamesService from "../services/games.service.js";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+const enableBezirkFilter =
+  String(import.meta.env.VITE_ENABLE_BEZIRK_FILTER || "")
+    .trim()
+    .toLowerCase() === "true";
 
 const games = ref([])
 const loading = ref(false)
@@ -88,6 +93,7 @@ const serverParams = ref({
   columnFilters: {
     spieldatum: '',
     ligaName: '',
+    ...(enableBezirkFilter ? { bezirkName: '' } : {}),
     spielfeldName: '',
     search: ''
   },
@@ -117,9 +123,7 @@ function renderToHtml(icon, options = {}) {
 const processedGames = computed(() => {
   return games.value.map(game => ({
     ...game,
-    id: `<a href="https://www.basketball-bund.net/app.do?app=/sr/take&spielId=${game.spielplanId}" target="_blank" class="btn btn-primary btn-sm">
-        ${renderToHtml('fa-solid fa-handshake')} Übernehmen
-      </a>`
+    id: `<a href="https://www.basketball-bund.net/app.do?app=/sr/take&spielId=${game.spielplanId}" target="_blank" class="btn btn-primary btn-sm">Übernehmen</a>`
   }))
 })
 
@@ -130,12 +134,17 @@ const updateParams = (newProps) => {
 const loadGames = async () => {
   loading.value = true
   try {
+    const columnFilters = { ...serverParams.value.columnFilters }
+    if (!enableBezirkFilter) {
+      delete columnFilters.bezirkName
+    }
+
     const params = {
       page: serverParams.value.page,
       limit: serverParams.value.perPage,
       sortBy: serverParams.value.sort.field,
       sortOrder: serverParams.value.sort.type,
-      ...serverParams.value.columnFilters
+      ...columnFilters
     }
     
     const res = await GamesService.getSpiele(params)
@@ -158,6 +167,10 @@ const handlePageChange = (page) => {
 }
 
 const handleFilterChange = (filters) => {
+  if (!enableBezirkFilter && filters && Object.prototype.hasOwnProperty.call(filters, "bezirkName")) {
+    const { bezirkName, ...rest } = filters
+    filters = rest
+  }
   updateParams({
     columnFilters: { ...serverParams.value.columnFilters, ...filters },
     page: 1
@@ -250,6 +263,7 @@ onMounted(() => {
     columnFilters: {
       spieldatum: '',
       ligaName: '',
+      ...(enableBezirkFilter ? { bezirkName: '' } : {}),
       spielfeldName: '',
       search: ''
     },
@@ -273,68 +287,45 @@ onUnmounted(() => {
 
 <style scoped>
 .polling-controls {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 1rem;
+  background: #f0f2f4;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  padding: 0.75rem 1rem;
 }
 
 .form-check-label {
-  color: white;
+  color: #333333;
   font-weight: 500;
 }
 
 .form-check-input:checked {
-  background-color: #28a745;
-  border-color: #28a745;
-}
-
-.form-check-input:checked:focus {
-  background-color: #28a745;
-  border-color: #28a745;
-  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+  background-color: #d78300;
+  border-color: #d78300;
 }
 
 .countdown-text {
-  color: rgba(255, 255, 255, 0.8);
+  color: #555555;
   font-size: 0.9rem;
-}
-
-.countdown-text.text-muted {
-  color: rgba(255, 255, 255, 0.5) !important;
 }
 
 .min-height-40 {
   min-height: 40px;
 }
 
-/* Scrollbar Styling für vgt-responsive */
 :deep(.vgt-responsive) {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+  scrollbar-color: #adb5bd #f0f2f4;
 }
 
 :deep(.vgt-responsive)::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  height: 6px;
 }
 
 :deep(.vgt-responsive)::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  background: #f0f2f4;
 }
 
 :deep(.vgt-responsive)::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-  transition: background 0.2s ease;
-}
-
-:deep(.vgt-responsive)::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-:deep(.vgt-responsive)::-webkit-scrollbar-corner {
-  background: rgba(255, 255, 255, 0.1);
+  background: #adb5bd;
 }
 </style>

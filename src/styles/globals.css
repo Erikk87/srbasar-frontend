@@ -1,14 +1,13 @@
 :root {
-  /* NBV-inspired color system */
-  --bs-primary: #d78300;              /* warm NBV accent orange */
-  --bs-secondary: #001d33;            /* NBV dark blue body text/nav */
+  --bs-primary: #d78300;
+  --bs-secondary: #001d33;
   --bs-success: #198754;
   --bs-info: #0dcaf0;
   --bs-warning: #ffc107;
   --bs-danger: #dc3545;
   --bs-light: #f5f6f8;
   --bs-dark: #001d33;
-  
+
   --bs-primary-rgb: 215, 131, 0;
   --bs-secondary-rgb: 0, 29, 51;
   --bs-success-rgb: 25, 135, 84;
@@ -17,33 +16,30 @@
   --bs-danger-rgb: 220, 53, 69;
   --bs-light-rgb: 245, 246, 248;
   --bs-dark-rgb: 0, 29, 51;
-  
-  --bs-body-bg: #f5f6f8;
-  --bs-body-color: #001d33;
-  --bs-border-color: #d5d9e0;
-}
 
-[data-bs-theme="dark"] {
-  --bs-body-bg: #001d33;
-  --bs-body-color: #f8f9fa;
-  --bs-border-color: #495057;
+  --bs-body-bg: transparent;
+  --bs-body-color: #001d33;
+  --bs-border-color: #dee2e6;
+
+  /* Override Bootstrap's 1rem defaults for component-level font sizes */
+  --bs-body-font-size: 0.9rem;
+  --bs-btn-font-size: 0.9rem;
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
-  line-height: 1.6;
-  color: var(--bs-body-color);
-  background-color: var(--bs-body-bg);
+html {
+  background: transparent;
 }
 
-/* Main content: light, card-based look similar to nbv-basketball.de */
-.main-content {
+body {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.5;
   color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
 }
 
 .main-content h1,
@@ -53,22 +49,13 @@ body {
 .main-content h5,
 .main-content h6 {
   color: var(--bs-dark);
-  font-weight: 700;
-}
-
-.main-content p {
-  color: var(--bs-body-color);
+  font-weight: 600;
 }
 
 .main-content .card {
   background: #ffffff;
-  border-radius: 0.5rem;
+  border-radius: 0.25rem;
   border: 1px solid var(--bs-border-color);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-}
-
-.main-content .card-body {
-  color: var(--bs-body-color);
 }
 
 .main-content .table {
@@ -77,18 +64,15 @@ body {
 }
 
 .main-content .table th {
-  background: var(--bs-dark);
-  color: #ffffff;
-  border-bottom: none;
+  background: #e9ecef;
+  color: #333333;
+  border-bottom: 1px solid var(--bs-border-color);
+  font-weight: 600;
 }
 
 .main-content .table td {
   color: var(--bs-body-color);
   border-bottom: 1px solid var(--bs-border-color);
-}
-
-.main-content .table tbody tr:hover {
-  background-color: rgba(var(--bs-primary-rgb), 0.06);
 }
 
 .main-content .form-control,
@@ -103,16 +87,16 @@ body {
   background: #ffffff;
   border-color: var(--bs-primary);
   color: var(--bs-body-color);
-  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+  box-shadow: 0 0 0 0.15rem rgba(var(--bs-primary-rgb), 0.2);
 }
 
 .main-content .form-control::placeholder {
-  color: #7a8594;
+  color: #6c757d;
 }
 
 .main-content .btn {
-  border-radius: 999px;
-  font-weight: 600;
+  border-radius: 0.25rem;
+  font-weight: 500;
 }
 
 .main-content .btn-primary {
@@ -133,9 +117,9 @@ body {
 }
 
 .main-content .btn-outline-primary:hover {
-  background-color: rgba(var(--bs-primary-rgb), 0.08);
+  background-color: var(--bs-primary);
   border-color: var(--bs-primary);
-  color: var(--bs-primary);
+  color: #ffffff;
 }
 
 .main-content .alert {
@@ -145,53 +129,51 @@ body {
 }
 
 .btn {
-  border-radius: 0.375rem;
+  border-radius: 0.25rem;
   font-weight: 500;
-  transition: all 0.2s ease;
+  font-size: 0.9rem;
 }
 
-.btn:hover {
-  transform: translateY(-1px);
-}
-
-.form-control, .form-select {
-  border-radius: 0.375rem;
+.form-control,
+.form-select {
+  border-radius: 0.25rem;
   border: 1px solid var(--bs-border-color);
-  transition: border-color 0.2s ease;
+  font-size: 0.9rem;
 }
 
-.form-control:focus, .form-select:focus {
-  border-color: var(--bs-primary);
-  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
-}
-
-.card {
-  border-radius: 0.5rem;
-  border: none;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-}
-
-.modal-content {
-  border-radius: 0.5rem;
-  border: none;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+.form-label {
+  font-size: 0.9rem;
 }
 
 .table {
-  border-radius: 0.5rem;
-  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+.modal-content {
+  font-size: 0.9rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.15rem rgba(var(--bs-primary-rgb), 0.2);
+}
+
+.card {
+  border-radius: 0.25rem;
+  border: 1px solid var(--bs-border-color);
+  box-shadow: none;
+}
+
+.modal-content {
+  border-radius: 0.25rem;
+  border: 1px solid var(--bs-border-color);
 }
 
 .table th {
-  background-color: var(--bs-primary);
-  color: white;
-  border: none;
+  background-color: #e9ecef;
+  color: #333333;
+  border-bottom: 1px solid var(--bs-border-color);
   font-weight: 600;
 }
 
@@ -200,22 +182,18 @@ body {
   vertical-align: middle;
 }
 
-.table tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-}
-
 .alert {
-  border-radius: 0.5rem;
-  border: none;
+  border-radius: 0.25rem;
+  border: 1px solid var(--bs-border-color);
 }
 
 .badge {
-  border-radius: 0.375rem;
+  border-radius: 0.25rem;
   font-weight: 500;
 }
 
 .navbar {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .navbar-brand {
@@ -223,100 +201,33 @@ body {
 }
 
 .dropdown-menu {
-  border-radius: 0.5rem;
-  border: none;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+  border: 1px solid var(--bs-border-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .pagination .page-link {
-  border-radius: 0.375rem;
+  border-radius: 0.25rem;
   margin: 0 0.125rem;
 }
 
-.tooltip {
-  border-radius: 0.375rem;
-}
-
-.popover {
-  border-radius: 0.5rem;
-  border: none;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-}
-
-/* Form Switch Styles für Glasmorphismus-Design */
 .form-check-input {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
+  border-color: #adb5bd;
 }
 
 .form-check-input:checked {
-  background-color: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
 }
 
 .form-check-input:focus {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
-}
-
-.form-check-input:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 0.15rem rgba(var(--bs-primary-rgb), 0.2);
 }
 
 .form-check-label {
-  color: #ffffff;
-  font-weight: 500;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
+  color: var(--bs-body-color);
 }
 
-.form-check-label:hover {
-  color: rgba(255, 255, 255, 0.9);
+.text-muted {
+  color: #6c757d !important;
 }
-
-.form-switch .form-check-input {
-  width: 3rem;
-  height: 1.5rem;
-  margin-top: 0.125rem;
-  background-image: none !important;
-  background-position: left center;
-  border-radius: 2rem;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.form-switch .form-check-input::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 2px;
-  width: 1.25rem;
-  height: 1.25rem;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  transform: translateY(-50%);
-}
-
-.form-switch .form-check-input:checked {
-  background-position: right center;
-  background-image: none !important;
-}
-
-.form-switch .form-check-input:checked::before {
-  left: calc(100% - 1.25rem - 2px);
-  background-color: rgba(255, 255, 255, 1);
-}
-
-.form-switch .form-check-input:focus {
-  background-image: none !important;
-}
-
-.form-switch .form-check-input:checked:focus {
-  background-image: none !important;
-} 

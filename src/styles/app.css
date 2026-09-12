@@ -1,81 +1,95 @@
-/* App-level typography aligned with nbv-basketball.de */
 #app {
-  font-family: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Source Sans 3", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
   color: #001d33;
 }
 
-p {
-  color: #001d33;
+p { color: #001d33; }
+h1, h2, h3, h4, h5, h6 { color: #001d33; }
+body, strong { color: #001d33; }
+
+input[type="checkbox"] {
+  accent-color: #d78300;
+}
+input[type="checkbox"][disabled] {
+  display: none;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #001d33;
+.vereine {
+  background: transparent !important;
+  border: none !important;
 }
 
-body,
-strong {
-  color: #001d33;
+/* Vue Good Table */
+table.vgt-table {
+  font-size: 0.9rem !important;
 }
 
-.bg-darker {
-  color: #001d33;
-}
-.nocturnal {
-  border: 1px solid #435169 !important;
-  background-color: #324057 !important;
-}
-.otherClub {
-  border: 1px solid #435169 !important;
-  background-color: #324057 !important;
-}
-input[type="checkbox"]{
-  accent-color: #324057 !important;
-}
-input[type="checkbox"][disabled]{
-  display:none;
-}
-
-
-.vereine,
-.vgt-wrap.nocturnal,
-.nocturnal{
- background: transparent !important;
- border: none !important;
-}
-
-/* Vue Good Table styling adapted to NBV colors */
 .vgt-table tbody tr {
   background-color: #ffffff !important;
+  transform: none !important;
 }
 
 .vgt-table tbody tr:nth-child(even) {
-  background-color: #f5f6f8 !important;
+  background-color: #ffffff !important;
+}
+
+.vgt-table tbody tr:hover {
+  background-color: #ffffff !important;
+  transform: none !important;
 }
 
 .vgt-table tbody td {
   color: #001d33 !important;
+  padding: 0.4rem 0.6rem !important;
+  border-bottom: 1px solid #adb5bd !important;
+  vertical-align: middle !important;
+}
+
+.vgt-table tbody tr:hover td {
+  border-bottom: 1px solid #adb5bd !important;
+  padding-left: 0.6rem !important;
 }
 
 .vgt-table thead tr th {
-  background: #001d33 !important;
-  color: #ffffff !important;
+  background: #e9ecef !important;
+  color: #333333 !important;
+  padding: 0.4rem 0.6rem !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
 }
 
-.vgt-table thead,
-.vgt-wrap__footer {
-  margin: 20px 0;
+.vgt-table thead {
   background: #ffffff !important;
-  border-radius: 10px;
-  border: 1px solid #d5d9e0 !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
+.vgt-wrap__footer {
+  background: #ffffff !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  font-size: 0.9rem !important;
+  padding: 0.4rem 0.75rem !important;
+}
+
+.vgt-wrap__footer .footer__row-count__label,
+.vgt-wrap__footer .footer__row-count__select,
+.vgt-wrap__footer .footer__navigation,
+.vgt-wrap__footer .footer__navigation__page-btn span,
+.vgt-wrap__footer .footer__navigation__info,
+.vgt-wrap__footer .footer__navigation__page-info {
+  font-size: 0.9rem !important;
+}
+
+.vgt-wrap__footer .footer__row-count__select {
+  background: #ffffff !important;
+  color: #001d33 !important;
+  border: 1px solid #dee2e6 !important;
 }
 
 .vgt-inner-wrap {
@@ -85,178 +99,90 @@ input[type="checkbox"][disabled]{
 
 .vgt-responsive,
 .vgt-table {
-  border-radius: 10px;
-  border: 1px solid #d5d9e0 !important;
+  border-radius: 0 !important;
+  border: 1px solid #dee2e6 !important;
 }
-
 
 .vgt-global-search.vgt-clearfix {
-  margin: 20px 0;
-  border-radius: 10px;
+  border-radius: 0 !important;
+  margin: 0 0 0.5rem 0 !important;
 }
 
-/* MazPhoneNumberInput Styling */
-.maz-phone-number-input {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 6px !important;
-  color: #ffffff !important;
-  backdrop-filter: blur(10px) !important;
+/* Maz Phone Number Input */
+.maz-phone-number-input,
+.m-phone-number-input {
   width: 100% !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 0.25rem !important;
+  background: #ffffff !important;
 }
 
-.maz-phone-number-input .maz-phone-number-input__country-selector {
-  background: transparent !important;
-  border: none !important;
-  color: #ffffff !important;
-}
-
-.maz-phone-number-input .maz-phone-number-input__country-selector select {
-  background: transparent !important;
-  border: none !important;
-  color: #ffffff !important;
-  outline: none !important;
-}
-
-.maz-phone-number-input .maz-phone-number-input__phone-input {
-  background: transparent !important;
-  border: none !important;
-  color: #ffffff !important;
-  outline: none !important;
+.m-input-input,
+.m-input-wrapper {
   width: 100% !important;
+  background: #ffffff !important;
+  border: none !important;
+  color: #333333 !important;
 }
-.m-input-input,.m-input-wrapper{
-  width: 100% !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border:none !important;
-  color: white !important;
-}
-.m-phone-number-input{ 
-  border: 1px solid rgba(255, 255, 255, 0.3)!important;
-  border-radius: 10px !important
-}
-.m-input-wrapper input{
+
+.m-input-wrapper input {
   background: transparent !important;
 }
-.maz-phone-number-input .maz-phone-number-input__phone-input::placeholder {
-  color: rgba(255, 255, 255, 0.6) !important;
-}
 
-.maz-phone-number-input:focus-within {
-  background: rgba(255, 255, 255, 0.15) !important;
-  border-color: rgba(255, 255, 255, 0.4) !important;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
-}
-
-.maz-phone-number-input .maz-phone-number-input__dropdown {
-  background: rgba(0, 0, 0, 0.9) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 6px !important;
-  color: #ffffff !important;
-}
-
-.maz-phone-number-input .maz-phone-number-input__dropdown option {
-  background: rgba(0, 0, 0, 0.9) !important;
-  color: #ffffff !important;
-}
-
-.maz-phone-number-input .maz-phone-number-input__dropdown option:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Maz Select List Dark Mode Styling */
+/* Maz Select List */
 .m-select-list {
-  background: rgba(0, 0, 0, 0.95) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
-  backdrop-filter: blur(10px) !important;
+  background: #ffffff !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 0.25rem !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
 }
 
 .m-select-list .m-select-list__item {
-  color: #ffffff !important;
+  color: #212529 !important;
   background: transparent !important;
   border: none !important;
-  padding: 8px 12px !important;
-  transition: all 0.2s ease !important;
+  padding: 0.4rem 0.75rem !important;
 }
 
 .m-select-list .m-select-list__item:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
+  background: #f8f9fa !important;
+  color: #212529 !important;
 }
 
 .m-select-list .m-select-list__item--selected {
-  background: rgba(255, 255, 255, 0.15) !important;
-  color: #ffffff !important;
-  font-weight: 500 !important;
-}
-
-.m-select-list .m-select-list__item--keyboard-selected {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
-}
-
-.m-select-list .m-select-list__item--disabled {
-  color: rgba(255, 255, 255, 0.4) !important;
-  background: transparent !important;
-}
-
-.m-select-list .m-select-list__item--disabled:hover {
-  background: transparent !important;
-  color: rgba(255, 255, 255, 0.4) !important;
-}
-
-/* Maz Select List Search Input Dark Mode Styling */
-.m-select-list .m-select-list__search-input::placeholder {
-  color: #ffffff !important;
+  background: #e9ecef !important;
+  color: #212529 !important;
+  font-weight: 600 !important;
 }
 
 .m-select-list .m-select-list__search-wrapper input {
-  color: #ffffff !important;
+  color: #212529 !important;
 }
 
-.m-select-list .m-select-list__search-wrapper svg {
-  color: #ffffff !important;
-  fill: #ffffff !important;
-}
-
-.m-select-list .m-select-list__search-wrapper .m-select-list__search-icon {
-  color: #ffffff !important;
-}
-
-/* Dropdown Menu Dark Mode Styling */
+/* Dropdown Menu */
 .dropdown-menu {
   background: #ffffff !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 0.25rem !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
 }
 
 .dropdown-menu .dropdown-item {
   color: #212529 !important;
   background: transparent !important;
-  border: none !important;
-  padding: 8px 16px !important;
-  transition: all 0.2s ease !important;
+  padding: 0.4rem 1rem !important;
 }
 
 .dropdown-menu .dropdown-item:hover {
-  background: rgba(0, 0, 0, 0.05) !important;
+  background: #f8f9fa !important;
   color: #212529 !important;
 }
 
 .dropdown-menu .dropdown-item:active {
-  background: rgba(0, 0, 0, 0.1) !important;
+  background: #e9ecef !important;
   color: #212529 !important;
 }
 
-.dropdown-menu .dropdown-item:focus {
-  background: rgba(0, 0, 0, 0.05) !important;
-  color: #212529 !important;
-  opacity: 0.5 !important;
-}
-
-.text-muted{
-  color: #babfc4 !important;
+.text-muted {
+  color: #6c757d !important;
 }

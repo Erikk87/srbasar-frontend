@@ -1,32 +1,11 @@
 <template>
   <footer class="footer">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="footer-links">
-            <a :href="githubFrontendUrl" target="_blank" class="footer-link">
-              <font-awesome-icon icon="fa-brands fa-github" class="me-2" />
-              Frontend
-            </a>
-            <a :href="githubBackendUrl" target="_blank" class="footer-link">
-              <font-awesome-icon icon="fa-brands fa-github" class="me-2" />
-              Backend
-            </a>
-            <a href="mailto:problems@srbasar.de" class="footer-link">
-              <font-awesome-icon icon="fa-solid fa-envelope" class="me-2" />
-              Probleme melden
-            </a>
-            <!-- Verwaltung Button - nur für nicht authentifizierte Benutzer -->
-            <router-link v-if="!isAuthenticated" to="/login" class="footer-link">
-              <font-awesome-icon icon="fa-solid fa-cog" class="me-1" />
-              Verwaltung
-            </router-link>
-            <span class="footer-copyright">
-              © 2025 Dirk Drutschmann
-            </span>
-          </div>
-        </div>
-      </div>
+    <div class="footer-links">
+      <a :href="githubFrontendUrl" target="_blank" class="footer-link">Frontend</a>
+      <a :href="githubBackendUrl" target="_blank" class="footer-link">Backend</a>
+      <a href="mailto:problems@srbasar.de" class="footer-link">Probleme melden</a>
+      <router-link v-if="!isAuthenticated" to="/login" class="footer-link">Verwaltung</router-link>
+      <span class="footer-copyright">© 2025 Dirk Drutschmann</span>
     </div>
   </footer>
 </template>
@@ -38,57 +17,37 @@ import { useAuthStore } from '@/stores/auth.store'
 const authStore = useAuthStore()
 const isAuthenticated = computed(() => authStore.getIsAuthenticated())
 
-const githubFrontendUrl = import.meta.env.VITE_GITHUB_FRONTEND_URL || 'https://github.com/drutschmann/spielebasar-frontend'
-const githubBackendUrl = import.meta.env.VITE_GITHUB_BACKEND_URL || 'https://github.com/drutschmann/spielebasar-backend'
+const githubFrontendUrl = import.meta.env.VITE_GITHUB_FRONTEND_URL || 'https://github.com'
+const githubBackendUrl = import.meta.env.VITE_GITHUB_BACKEND_URL || 'https://github.com'
 </script>
 
 <style scoped>
 .footer {
-  background: var(--bs-dark);
-  color: white;
-  padding: 2rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border-top: 1px solid #dee2e6;
+  padding: 0.4rem 0;
   flex-shrink: 0;
-  margin-top: auto;
 }
 
 .footer-links {
   display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
+  gap: 1.25rem;
+  justify-content: center;
   flex-wrap: wrap;
+  font-size: 0.75rem;
 }
 
 .footer-link {
-  color: rgba(255, 255, 255, 0.8);
+  color: #555555;
   text-decoration: none;
-  transition: color 0.2s ease;
-  display: inline-flex;
-  align-items: center;
 }
 
 .footer-link:hover {
-  color: white;
-  text-decoration: none;
+  color: #001d33;
+  text-decoration: underline;
 }
 
 .footer-copyright {
-  margin-left: 1rem;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.875rem;
+  color: #888888;
 }
-
-
-@media (max-width: 991.98px) {
-  .footer-links {
-    justify-content: flex-start;
-    margin-top: 1rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .footer {
-    padding: 1.5rem 0;
-  }
-}
-</style> 
+</style>
