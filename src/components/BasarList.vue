@@ -28,21 +28,19 @@
       </div>
 
       <div v-show="!filtersCollapsed" class="filters-content">
-        <div class="row gx-2 align-items-end flex-nowrap">
+        <div class="row gx-2 align-items-end">
           <div class="col">
-            <label class="form-label">Spielfeld</label>
+            <label class="form-label">Halle</label>
             <Multiselect
               v-model="localFilters.spielfeldName"
               :options="availableFilters.spielfeldName || []"
               :searchable="true"
               :create-option="false"
-              placeholder="Alle Spielfelder"
+              :show-labels="false"
+              placeholder="Alle Hallen"
               noOptionsText="Liste ist leer"
               noResultsText="Keine Ergebnisse gefunden"
               searchPlaceholder="Suchen..."
-              selectLabel="Enter zum Auswählen"
-              deselectLabel="Enter zum Entfernen"
-              selectedLabel="Ausgewählt"
               @change="applyFilters"
               class="custom-multiselect"
             />
@@ -54,13 +52,11 @@
               :options="availableFilters.ligaName || []"
               :searchable="true"
               :create-option="false"
+              :show-labels="false"
               placeholder="Alle Ligen"
               noOptionsText="Liste ist leer"
               noResultsText="Keine Ergebnisse gefunden"
               searchPlaceholder="Suchen..."
-              selectLabel="Enter zum Auswählen"
-              deselectLabel="Enter zum Entfernen"
-              selectedLabel="Ausgewählt"
               @change="applyFilters"
               class="custom-multiselect"
             />
@@ -72,13 +68,11 @@
               :options="availableFilters.bezirkName || []"
               :searchable="true"
               :create-option="false"
+              :show-labels="false"
               placeholder="Alle Bezirke"
               noOptionsText="Liste ist leer"
               noResultsText="Keine Ergebnisse gefunden"
               searchPlaceholder="Suchen..."
-              selectLabel="Enter zum Auswählen"
-              deselectLabel="Enter zum Entfernen"
-              selectedLabel="Ausgewählt"
               @change="applyFilters"
               class="custom-multiselect"
             />
@@ -90,13 +84,11 @@
               :options="availableFilters.srLizenz || []"
               :searchable="true"
               :create-option="false"
+              :show-labels="false"
               placeholder="Alle Lizenzen"
               noOptionsText="Liste ist leer"
               noResultsText="Keine Ergebnisse gefunden"
               searchPlaceholder="Suchen..."
-              selectLabel="Enter zum Auswählen"
-              deselectLabel="Enter zum Entfernen"
-              selectedLabel="Ausgewählt"
               @change="applyFilters"
               class="custom-multiselect"
             />
@@ -395,7 +387,7 @@ const columns = (() => {
     sortable: false,
   },
   {
-    label: "Spielfeld",
+    label: "Halle",
     field: "spielfeldName",
     thClass: "text-center",
     tdClass: "text-center",
@@ -610,6 +602,11 @@ watch(
   margin-bottom: 0.1rem;
 }
 
+/* Search input: match the fixed height of Multiselect/Datepicker/buttons */
+.filters-content input.form-control {
+  min-height: 38px;
+}
+
 .active-filters-badge {
   display: flex;
   align-items: center;
@@ -712,12 +709,17 @@ watch(
   background: white;
   margin-top: 1px;
   font-size: 0.9rem;
+  min-width: 100%;
+  width: max-content;
+  max-width: min(90vw, 320px);
 }
 
 :deep(.multiselect__option) {
   padding: 0.4rem 0.75rem;
   cursor: pointer;
   font-size: 0.9rem;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 :deep(.multiselect__option--highlight) {
