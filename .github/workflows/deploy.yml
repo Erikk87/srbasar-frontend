@@ -78,6 +78,11 @@ jobs:
           VITE_SUPPORT_ENABLED=${{ vars.VITE_SUPPORT_ENABLED }}
           VITE_COMPACT_HEADING=${{ vars.VITE_COMPACT_HEADING }}
           VITE_FIXED_THEME=${{ vars.VITE_FIXED_THEME }}
+          VITE_NBBV_FOOTER=${{ vars.VITE_NBBV_FOOTER }}
+          VITE_INFO_URL=${{ vars.VITE_INFO_URL }}
+          VITE_SITE_LOGO=${{ vars.VITE_SITE_LOGO }}
+          VITE_SITE_LOGO_LINK=${{ vars.VITE_SITE_LOGO_LINK }}
+          VITE_SITE_LOGO_ALT=${{ vars.VITE_SITE_LOGO_ALT }}
           EOF
 
       - name: Build

@@ -11,7 +11,10 @@
       <main id="mvp-main" class="mvp-main">
         <section class="basar-page" aria-labelledby="basar-title">
           <div class="page-heading" :class="{ 'page-heading--compact': compactHeading }">
-            <div v-if="compactHeading">
+            <div v-if="compactHeading" class="page-heading-brand">
+              <a v-if="siteLogo" class="page-heading-logo" :href="siteLogoLink" target="_blank" rel="noopener">
+                <img :src="siteLogo" :alt="siteLogoAlt" />
+              </a>
               <h1 id="basar-title">{{ siteName }} <span class="page-heading-tagline">{{ siteTagline }}</span></h1>
             </div>
             <div v-else>
@@ -119,7 +122,7 @@
             </div>
 
             <div v-if="activeFilterLabels.length" class="active-filters" aria-label="Aktive Filter">
-              <span class="active-filter-label">Aktiv:</span>
+              <span class="active-filter-label">Aktiv</span>
               <button
                 v-for="activeFilter in activeFilterLabels"
                 :key="activeFilter.key"
@@ -444,7 +447,8 @@
 
       </main>
 
-      <footer class="mvp-footer">
+      <NbbvFooter v-if="nbbvFooter" />
+      <footer v-else class="mvp-footer">
         <div class="mvp-footer-inner">
           <div class="mvp-footer-brand">
             <strong>{{ siteName }}</strong>
@@ -919,6 +923,7 @@ import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GamesService from '@/services/games.service.js'
 import RefereeAssignments from '@/components/games/RefereeAssignments.vue'
+import NbbvFooter from '@/components/layout/NbbvFooter.vue'
 import GameRiskBadge from '@/components/games/GameRiskBadge.vue'
 import BallersClubCard from '@/modules/ballersclub/BallersClubCard.vue'
 import BallersClubRow from '@/modules/ballersclub/BallersClubRow.vue'
@@ -955,6 +960,12 @@ const compactHeading = import.meta.env.VITE_COMPACT_HEADING === 'true'
 const fixedTheme = ['light', 'dark'].includes(import.meta.env.VITE_FIXED_THEME) ? import.meta.env.VITE_FIXED_THEME : null
 // Hinweis auf das Original-Projekt, sobald jemand anderes die Instanz betreibt
 const showUpstreamCredit = operatorName !== 'Dirk Drutschmann'
+// Fork-Erweiterung: Fußzeile im Stil der übrigen NBBV-Dienste
+const nbbvFooter = import.meta.env.VITE_NBBV_FOOTER === 'true'
+// Logo im kompakten Kopf; Dateiname relativ zum Basispfad (public/), z. B. "logo.png"
+const siteLogo = import.meta.env.VITE_SITE_LOGO ? import.meta.env.BASE_URL + import.meta.env.VITE_SITE_LOGO : ''
+const siteLogoLink = import.meta.env.VITE_SITE_LOGO_LINK || '/'
+const siteLogoAlt = import.meta.env.VITE_SITE_LOGO_ALT || siteName
 
 const quickFilters = [
   { id: 'nearby', label: 'In deiner Nähe', icon: ['fas', 'location-dot'] },
@@ -2457,6 +2468,24 @@ onUnmounted(() => {
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.2;
+}
+
+.page-heading-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.page-heading-logo {
+  flex: 0 0 auto;
+  line-height: 0;
+}
+
+.page-heading-logo img {
+  display: block;
+  width: auto;
+  height: 3.25rem;
 }
 
 .page-heading-tagline {
@@ -4814,6 +4843,10 @@ onUnmounted(() => {
   .page-heading--compact {
     align-items: stretch;
     gap: 0.6rem;
+  }
+
+  .page-heading-logo img {
+    height: 2.6rem;
   }
 
   .refresh-controls {

@@ -1,0 +1,38 @@
+/*
+ * Kopie der NBBV-Design-Tokens aus nbbv-webservices/shared/nbbv.css
+ * (github.com/Erikk87/nbbv-webservices). Bei Änderungen dort hier nachziehen.
+ * Die Schrift-Einbindung (@font-face) steht in brand-nbbv.css.
+ */
+
+:root {
+    /* Markenfarben */
+    --nbbv-navy:       #002e48;
+    --nbbv-orange:     #d78300;
+
+    /* Text und Flächen */
+    --nbbv-text:       #1c2b35;
+    --nbbv-muted:      #5a6a76;
+    --nbbv-muted-2:    #7d8b95;
+    --nbbv-line:       #d3dde4;
+    --nbbv-input-line: #b9c6cf;
+    --nbbv-soft:       #f1f5f8;
+    --nbbv-soft-2:     #e8eff4;
+
+    /* Status */
+    --nbbv-danger:     #c62828;
+    --nbbv-danger-bg:  #fdecea;
+    --nbbv-ok:         #1d6b35;
+    --nbbv-ok-bg:      #e6f2ea;
+
+    /* Hinweise (Orange-Ton) */
+    --nbbv-note-bg:    #fdf3e3;
+    --nbbv-note-line:  #f0d3a3;
+    --nbbv-note-text:  #7a4a00;
+
+    /* Schriftgrößen relativ zur Basis (16 / 15 / 14 px je nach Bildschirm) */
+    --nbbv-fs-small:   0.85em;
+    --nbbv-fs-xs:      0.75em;
+
+    --nbbv-radius:     5px;
+    --nbbv-font:       "Source Sans 3", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}

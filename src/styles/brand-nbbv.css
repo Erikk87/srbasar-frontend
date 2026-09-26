@@ -4,7 +4,7 @@
  * Ziel: gleiche Anmutung wie Meldeportal und SR-Abrechnung (nbbv-webservices):
  * hell, flach, 5px-Radius, Linien statt Schatten, Navy für Text und Aktionen,
  * Orange als Akzent und Gliederungslinie. Werte nach nbbv-webservices/shared/nbbv.css
- * und shared/components.css.
+ * und shared/components.css; Tokens --nbbv-* kommen aus styles/nbbv.css (Kopie).
  *
  * Überschreibt fast nur --mvp-*-Variablen, damit Updates aus dem Original-Repo
  * (dirkdrutschmann/srbasar-frontend) konfliktarm bleiben. Die Selektoren sind
@@ -32,49 +32,49 @@ body {
 
 /* ── Tokens ─────────────────────────────────────────────────────────────── */
 html .design-mvp.design-mvp {
-  --mvp-font: "Source Sans 3", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --mvp-font: var(--nbbv-font);
 
   /* Flächen: Seite transparent, Inhaltsflächen weiß */
   --mvp-bg: transparent;
   --mvp-surface: #ffffff;
   --mvp-surface-solid: #ffffff;
-  --mvp-surface-muted: #f1f5f8;   /* --nbbv-soft */
-  --mvp-surface-strong: #e8eff4;  /* --nbbv-soft-2 */
+  --mvp-surface-muted: var(--nbbv-soft);
+  --mvp-surface-strong: var(--nbbv-soft-2);
 
   /* Text */
-  --mvp-text: #1c2b35;            /* --nbbv-text */
-  --mvp-text-soft: #5a6a76;       /* --nbbv-muted */
-  --mvp-text-faint: #7d8b95;      /* --nbbv-muted-2 */
-  --mvp-heading: #002e48;         /* --nbbv-navy */
-  --mvp-border: #d3dde4;          /* --nbbv-line */
-  --mvp-border-strong: #b9c6cf;   /* --nbbv-input-line */
+  --mvp-text: var(--nbbv-text);
+  --mvp-text-soft: var(--nbbv-muted);
+  --mvp-text-faint: var(--nbbv-muted-2);
+  --mvp-heading: var(--nbbv-navy);
+  --mvp-border: var(--nbbv-line);
+  --mvp-border-strong: var(--nbbv-input-line);
 
   /* Orange als Akzent, Text darauf Navy (wie .btn-primary) */
-  --mvp-brand: #d78300;
+  --mvp-brand: var(--nbbv-orange);
   --mvp-brand-rgb: 215, 131, 0;
-  --mvp-brand-dark: #d78300;
-  --mvp-brand-soft: #fdf3e3;      /* --nbbv-note-bg */
-  --mvp-on-brand: #002e48;
+  --mvp-brand-dark: var(--nbbv-orange);
+  --mvp-brand-soft: var(--nbbv-note-bg);
+  --mvp-on-brand: var(--nbbv-navy);
 
   /* Blau- und Violett-Akzente des Originals als NBBV-Navy */
-  --mvp-blue: #002e48;
+  --mvp-blue: var(--nbbv-navy);
   --mvp-blue-rgb: 0, 46, 72;
-  --mvp-blue-soft: #e8eff4;
-  --mvp-violet: #002e48;
-  --mvp-violet-soft: #e8eff4;
+  --mvp-blue-soft: var(--nbbv-soft-2);
+  --mvp-violet: var(--nbbv-navy);
+  --mvp-violet-soft: var(--nbbv-soft-2);
 
   /* Status */
-  --mvp-green: #1d6b35;           /* --nbbv-ok */
-  --mvp-assigned: #1d6b35;
-  --mvp-green-soft: #e6f2ea;      /* --nbbv-ok-bg */
-  --mvp-danger: #c62828;          /* --nbbv-danger */
+  --mvp-green: var(--nbbv-ok);
+  --mvp-assigned: var(--nbbv-ok);
+  --mvp-green-soft: var(--nbbv-ok-bg);
+  --mvp-danger: var(--nbbv-danger);
   --mvp-danger-border: rgba(198, 40, 40, 0.35);
-  --mvp-danger-soft: #fdecea;     /* --nbbv-danger-bg */
+  --mvp-danger-soft: var(--nbbv-danger-bg);
   --mvp-danger-wash: rgba(198, 40, 40, 0.03);
 
   /* Flach: Radius 5px, Schatten nur angedeutet (wie .login-box) */
-  --mvp-radius: 5px;
-  --mvp-radius-small: 5px;
+  --mvp-radius: var(--nbbv-radius);
+  --mvp-radius-small: var(--nbbv-radius);
   --mvp-shadow: 0 2px 12px rgba(0, 46, 72, 0.08);
   --mvp-shadow-small: 0 1px 4px rgba(0, 46, 72, 0.06);
 
@@ -191,6 +191,20 @@ html .design-mvp .mvp-footer-copyright a:hover {
 html .design-mvp :focus-visible {
   outline: 2px solid var(--mvp-brand);
   outline-offset: 2px;
+}
+
+/* ── Schriftstufen wie Meldeportal/SR-Abrechnung: 16 / 15 / 14 px ──────────
+   Umgesetzt über den Faktor für kleine Schrift; die Untergrenze 12px bleibt. */
+@media (max-width: 900px) {
+  html .design-mvp.design-mvp {
+    --mvp-small-text-scale: 1.125;
+  }
+}
+
+@media (max-width: 600px) {
+  html .design-mvp.design-mvp {
+    --mvp-small-text-scale: 1.05;
+  }
 }
 
 /* ── Smartphone ───────────────────────────────────────────────────────────── */
