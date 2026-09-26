@@ -75,12 +75,6 @@ jobs:
           VITE_BASE_PATH: ${{ steps.target.outputs.base }}
         run: npm run build
 
-      - name: .htaccess auf Unterpfad anpassen
-        run: |
-          BASE="${{ steps.target.outputs.base }}"
-          sed -i "s#RewriteBase /#RewriteBase ${BASE}#; s#RewriteRule \. /index\.html#RewriteRule . ${BASE}index.html#" dist/.htaccess
-          cat dist/.htaccess
-
       - name: Configure SSH
         env:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
