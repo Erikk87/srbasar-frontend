@@ -12,7 +12,7 @@
         <section class="basar-page" aria-labelledby="basar-title">
           <div class="page-heading" :class="{ 'page-heading--compact': compactHeading }">
             <div v-if="compactHeading">
-              <h1 id="basar-title">{{ siteTagline }}</h1>
+              <h1 id="basar-title">{{ siteName }} <span class="page-heading-tagline">{{ siteTagline }}</span></h1>
             </div>
             <div v-else>
               <p class="eyebrow">{{ siteTagline }}</p>
@@ -2444,6 +2444,14 @@ onUnmounted(() => {
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.2;
+}
+
+.page-heading-tagline {
+  color: var(--mvp-text-soft);
+  font-size: 0.7em;
+  font-weight: 500;
+  letter-spacing: 0;
+  white-space: nowrap;
 }
 
 .page-intro {
