@@ -1,0 +1,116 @@
+/*
+ * NBBV-Branding für die Basar-Oberfläche (DesignMvpView).
+ *
+ * Überschreibt nur die --mvp-*-Variablen aus DesignMvpView.vue, damit Updates
+ * aus dem Original-Repo (dirkdrutschmann/srbasar-frontend) konfliktarm bleiben.
+ * Werte nach den NBBV-Tokens aus nbbv-webservices/shared/nbbv.css.
+ *
+ * Die Selektoren sind absichtlich spezifischer ("html" + doppelte Klasse) als
+ * die scoped Styles der View, damit sie unabhängig von der Ladereihenfolge greifen.
+ */
+
+/* Schrift selbst gehostet (Source Sans 3, SIL Open Font License), keine Anfragen an Dritte */
+@font-face { font-family: "Source Sans 3"; font-weight: 400; font-style: normal; font-display: swap; src: url("../assets/fonts/source-sans-3-400.woff2") format("woff2"); }
+@font-face { font-family: "Source Sans 3"; font-weight: 600; font-style: normal; font-display: swap; src: url("../assets/fonts/source-sans-3-600.woff2") format("woff2"); }
+@font-face { font-family: "Source Sans 3"; font-weight: 700; font-style: normal; font-display: swap; src: url("../assets/fonts/source-sans-3-700.woff2") format("woff2"); }
+
+/* ── Helles Theme ─────────────────────────────────────────────────────────── */
+html .design-mvp.design-mvp {
+  --mvp-font: "Source Sans 3", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* Flächen und Text */
+  --mvp-bg: #f1f5f8;
+  --mvp-surface: rgba(255, 255, 255, 0.94);
+  --mvp-surface-solid: #ffffff;
+  --mvp-surface-muted: #e8eff4;
+  --mvp-surface-strong: #dde6ec;
+  --mvp-text: #1c2b35;
+  --mvp-text-soft: #5a6a76;
+  --mvp-text-faint: #7d8b95;
+  --mvp-heading: #002e48;
+  --mvp-border: #d3dde4;
+  --mvp-border-strong: #b9c6cf;
+
+  /* Markenfarben: Orange als Akzent, Text darauf dunkelblau (wie .btn-primary) */
+  --mvp-brand: #d78300;
+  --mvp-brand-rgb: 215, 131, 0;
+  --mvp-brand-dark: #a86600;
+  --mvp-brand-soft: #fdf3e3;
+  --mvp-on-brand: #002e48;
+
+  /* Dirks Blau-Akzent (z. B. LSE) als NBBV-Dunkelblau */
+  --mvp-blue: #1f5f8b;
+  --mvp-blue-rgb: 31, 95, 139;
+  --mvp-blue-soft: #e6eef5;
+  --mvp-violet: #002e48;
+  --mvp-violet-soft: #e6eef5;
+
+  /* Status */
+  --mvp-green: #1d6b35;
+  --mvp-assigned: #1d6b35;
+  --mvp-green-soft: #e6f2ea;
+  --mvp-danger: #c62828;
+  --mvp-danger-border: rgba(198, 40, 40, 0.35);
+  --mvp-danger-soft: #fdecea;
+  --mvp-danger-wash: rgba(198, 40, 40, 0.03);
+
+  /* Flacher und kantiger als das Original, wie die übrigen NBBV-Dienste */
+  --mvp-shadow: 0 10px 30px rgba(0, 46, 72, 0.08);
+  --mvp-shadow-small: 0 4px 14px rgba(0, 46, 72, 0.06);
+  --mvp-radius: 10px;
+  --mvp-radius-small: 6px;
+
+  /* Kleine Schrift lesbarer machen: mind. 12px, sonst +15 % */
+  --mvp-small-text-scale: 1.15;
+  --mvp-small-text-min: 0.75rem;
+}
+
+/* ── Dunkles Theme (auf NBBV-Dunkelblau) ──────────────────────────────────── */
+html .design-mvp.design-mvp[data-theme="dark"] {
+  --mvp-bg: #03182a;
+  --mvp-surface: rgba(8, 36, 56, 0.8);
+  --mvp-surface-solid: #0a2638;
+  --mvp-surface-muted: rgba(20, 52, 76, 0.72);
+  --mvp-surface-strong: rgba(30, 66, 94, 0.82);
+  --mvp-text: #eef3f7;
+  --mvp-text-soft: #aebfcc;
+  --mvp-text-faint: #7d8f9d;
+  --mvp-heading: #ffffff;
+  --mvp-border: rgba(174, 191, 204, 0.16);
+  --mvp-border-strong: rgba(174, 191, 204, 0.3);
+
+  --mvp-brand: #e0901a;
+  --mvp-brand-rgb: 224, 144, 26;
+  --mvp-brand-dark: #f0b454;
+  --mvp-brand-soft: rgba(224, 144, 26, 0.16);
+  --mvp-on-brand: #002e48;
+
+  --mvp-blue: #7fb3d9;
+  --mvp-blue-rgb: 127, 179, 217;
+  --mvp-blue-soft: rgba(127, 179, 217, 0.16);
+  --mvp-violet: #aecde6;
+  --mvp-violet-soft: rgba(127, 179, 217, 0.14);
+
+  --mvp-green: #5cc285;
+  --mvp-assigned: #6fd197;
+  --mvp-green-soft: rgba(92, 194, 133, 0.14);
+  --mvp-danger: #f28b8b;
+  --mvp-danger-border: rgba(242, 139, 139, 0.4);
+  --mvp-danger-soft: rgba(242, 139, 139, 0.14);
+  --mvp-danger-wash: rgba(242, 139, 139, 0.05);
+
+  --mvp-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  --mvp-shadow-small: 0 8px 24px rgba(0, 0, 0, 0.24);
+}
+
+/* Überschrift: Source Sans 3 wirkt mit Inters enger Laufweite zu gedrungen */
+html .design-mvp .page-heading h1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Tastaturfokus in Markenorange, wie in den übrigen NBBV-Diensten */
+html .design-mvp :focus-visible {
+  outline: 2px solid var(--mvp-brand);
+  outline-offset: 2px;
+}

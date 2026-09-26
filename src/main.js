@@ -13,6 +13,7 @@ import "vue-multiselect/dist/vue-multiselect.css";
 import "@vuepic/vue-datepicker/dist/main.css";
 import "./styles/globals.css";
 import "./styles/app.css";
+import "./styles/brand-nbbv.css";
 
 // Font Awesome
 import { library } from "@fortawesome/fontawesome-svg-core";
