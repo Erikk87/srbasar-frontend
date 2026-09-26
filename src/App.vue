@@ -1,26 +1,28 @@
 <template>
-  <div id="app">
-    <AppHeader />
+  <div id="app" :class="{ 'app--design-mvp': isDesignMvp }">
+    <template v-if="isDesignMvp">
+      <router-view />
+    </template>
 
-    <div class="page-title-bar">
-      <h1 class="page-title">{{ appTitle }}</h1>
-    </div>
+    <template v-else>
+      <main class="main-content">
+        <div class="container-fluid">
+          <router-view />
+        </div>
+      </main>
 
-    <main class="main-content">
-      <div class="container-fluid">
-        <router-view />
-      </div>
-    </main>
-
-    <AppFooter />
+      <AppFooter />
+    </template>
   </div>
 </template>
 
 <script setup>
-import AppHeader from './components/layout/AppHeader.vue'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import AppFooter from './components/layout/AppFooter.vue'
 
-const appTitle = import.meta.env.VITE_APP_TITLE || 'SR Basar'
+const route = useRoute()
+const isDesignMvp = computed(() => route.meta.layout === 'design-mvp')
 </script>
 
 <style scoped>
@@ -30,19 +32,13 @@ const appTitle = import.meta.env.VITE_APP_TITLE || 'SR Basar'
   min-height: 100vh;
 }
 
-.page-title-bar {
-  background: transparent;
-  text-align: center;
-  padding: 0.6rem 1rem 0.3rem;
-}
-
-.page-title {
-  color: #001d33;
+#app.app--design-mvp {
+  display: block;
 }
 
 .main-content {
   flex: 1;
-  background: transparent;
+  background: linear-gradient(135deg, var(--bs-primary), var(--bs-dark));
   display: flex;
   flex-direction: column;
 }

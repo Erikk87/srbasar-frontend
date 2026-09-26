@@ -40,6 +40,12 @@ Wir freuen uns über Beiträge zur Verbesserung des Projekts:
 
 ## 🚀 Features
 
+Die öffentliche Spielbörse bietet Kacheln und eine kompakte Desktop-Tabelle. Heim- und Gastteam sowie die SR-Vereine werden vollständig angezeigt. Die wiederverwendbare Komponente `RefereeAssignments` zeigt Rolle, Vereinsname und Status in Kacheln, Tabelle und Details.
+
+„Ausfall bedroht“ markiert Spiele mit zwei offen angebotenen SR-Positionen. Der Filter verwendet `atRiskOnly=true`; die API wendet ihn vor der Paginierung an. Er wird nur angeboten, wenn `availableFilters.atRiskCount > 0` ist. Verschwindet das letzte betroffene Spiel beim Aktualisieren, wird der Filter automatisch zurückgesetzt. Für diesen Filter muss auch das zugehörige Backend aktualisiert werden; eine ältere API ohne diese Metadaten bietet den Filter nicht an.
+
+`npm test` prüft Lint, die SR-Zustandslogik und den Produktionsbuild.
+
 - **Moderne Technologie**: Vue 3 mit Composition API und Vite
 - **Responsive Design**: Bootstrap 5 mit custom Styling
 - **Wiederverwendbare Komponenten**: Modulare UI-Komponenten
@@ -69,7 +75,6 @@ Wir freuen uns über Beiträge zur Verbesserung des Projekts:
 src/
 ├── components/
 │   ├── layout/             # Layout-Komponenten
-│   │   ├── AppHeader.vue
 │   │   └── AppFooter.vue
 │   ├── AnswerList.vue      # Antwort-Listen
 │   ├── BasarList.vue       # Basar-Listen
@@ -83,21 +88,17 @@ src/
 │   └── env.js              # Umgebungsvariablen-Konfiguration
 ├── directives/
 │   └── debounce.js         # Debounce-Direktive
-├── models/
-│   └── user.js             # User-Model
 ├── plugins/
 │   ├── bootstrap.js        # Bootstrap-Plugin
 │   ├── index.js            # Plugin-Index
 │   └── jquery.js           # jQuery-Plugin
 ├── services/
 │   ├── api-client.js       # API-Client
-│   ├── auth.service.js     # Authentifizierung
 │   ├── games.service.js    # Spiele-Service
 │   ├── ical.service.js     # iCal-Service
 │   ├── link.service.js     # Link-Service
-│   └── user.service.js     # User-Service
+│   └── geolocation.service.js # Standortfreigabe und Distanzformatierung
 ├── stores/
-│   ├── auth.store.js       # Auth-Store
 │   └── games.store.js      # Games-Store
 ├── styles/
 │   ├── app.css             # App-spezifische Styles
@@ -107,15 +108,12 @@ src/
 ├── views/
 │   ├── AllView.vue         # Alle-Ansicht
 │   ├── AnswerView.vue      # Antwort-Ansicht
-│   ├── BasarView.vue       # Basar-Ansicht
+│   ├── BasarView.vue       # Legacy-Basar-Ansicht
 │   ├── ExternalView.vue    # Externe-Ansicht
 │   ├── GamesView.vue       # Spiele-Ansicht
 │   ├── HistoryView.vue     # Historie-Ansicht
 │   ├── LinkView.vue        # Link-Ansicht
-│   ├── LoginView.vue       # Login-Ansicht
-│   ├── ProfileView.vue     # Profil-Ansicht
-│   ├── ResetPasswordView.vue # Passwort-Reset-Ansicht
-│   ├── ResetView.vue       # Reset-Ansicht
+│   ├── DesignMvpView.vue   # Öffentliche mobile Basar-Ansicht unter /
 │   └── UserView.vue        # User-Ansicht
 ├── assets/                 # Statische Assets
 │   ├── email.svg
@@ -135,7 +133,7 @@ Das Projekt verwendet Umgebungsvariablen für die Konfiguration.
 
 ```bash
 # .env Datei erstellen
-cp env.example .env
+cp .env.sample .env
 
 # Werte anpassen
 # Development
@@ -184,7 +182,7 @@ npm install
 
 ```bash
 # .env Datei erstellen
-cp env.example .env
+cp .env.sample .env
 
 # Werte anpassen
 ```
@@ -215,6 +213,33 @@ npm run preview
 npm run lint
 ```
 
+## 🚢 Releases und Deployment
+
+Pushes auf `main` führen Linting und einen Produktions-Build aus. Ein Release wird
+über einen SemVer-Tag ausgelöst, der exakt zur `version` in `package.json` passen
+muss:
+
+```bash
+npm version patch --no-git-tag-version
+git add package.json package-lock.json
+git commit -m "Release frontend v2.0.4"
+git push origin main
+git tag v2.0.4
+git push origin v2.0.4
+```
+
+Der Workflow baut das Frontend auf dem ISPConfig-Server mit der Datei
+`/var/www/clients/client2/web3/private/frontend/shared/.env`. Der fertige Build
+landet in einem versionierten Release-Verzeichnis. Danach wird der ISPConfig-
+Webpfad `/var/www/clients/client2/web3/web` bleibt ISPConfig-kompatibel bestehen;
+Assets werden vor dem atomaren Wechsel der `index.html` bereitgestellt. Die
+Release-Auswahl wird zusätzlich über `current` dokumentiert. Vorherige Releases
+bleiben für einen Rollback erhalten.
+
+Für das Repository werden die Actions-Secrets `DEPLOY_SSH_KEY` und
+`DEPLOY_KNOWN_HOSTS` benötigt. Der private Schlüssel wird nicht im Repository
+gespeichert.
+
 ## 🔧 Konfiguration
 
 ### Vite Config
@@ -240,7 +265,6 @@ npm run lint
 
 ### Layout-Komponenten
 
-- **AppHeader**: Hauptnavigation und Header-Bereich
 - **AppFooter**: Footer-Bereich mit Links und Informationen
 
 ### Listen-Komponenten
@@ -256,11 +280,12 @@ npm run lint
 ### Services
 
 - **api-client**: Zentrale API-Kommunikation
-- **auth.service**: Authentifizierung und Session-Management
 - **games.service**: Spiele-bezogene API-Calls
 - **ical.service**: iCal-Export und Kalender-Integration
 - **link.service**: Link-Management
-- **user.service**: Benutzer-Verwaltung
+- **geolocation.service**: Standortfreigabe und Formatierung der serverseitig berechneten Entfernung
+
+Die öffentliche Anwendung verwendet keine eigene Anmeldung mehr. Für die Übernahme eines Spiels wird ausschließlich zu Team-SL weitergeleitet; dort erfolgt die Anmeldung mit den persönlichen Zugangsdaten.
 
 ## 🎯 Best Practices
 

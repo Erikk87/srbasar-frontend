@@ -5,9 +5,14 @@ class GamesService {
     try {
       const response = await apiClient.get('/spiele', { params })
       return response.data
-    } catch (error) {
+    } catch {
       return []
     }
+  }
+
+  async getSpieleOrThrow(params = {}) {
+    const response = await apiClient.get('/spiele', { params })
+    return response.data
   }
 }
 

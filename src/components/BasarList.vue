@@ -28,82 +28,79 @@
       </div>
 
       <div v-show="!filtersCollapsed" class="filters-content">
-        <div class="row gx-2 align-items-end">
-          <div class="col">
-            <label class="form-label">Halle</label>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="form-label">Spielfeld</label>
             <Multiselect
               v-model="localFilters.spielfeldName"
               :options="availableFilters.spielfeldName || []"
               :searchable="true"
               :create-option="false"
-              :show-labels="false"
-              placeholder="Alle Hallen"
+              placeholder="Alle Spielfelder"
               noOptionsText="Liste ist leer"
               noResultsText="Keine Ergebnisse gefunden"
               searchPlaceholder="Suchen..."
+              selectLabel="Enter zum Auswählen"
+              deselectLabel="Enter zum Entfernen"
+              selectedLabel="Ausgewählt"
               @change="applyFilters"
               class="custom-multiselect"
             />
           </div>
-          <div class="col">
+          <div class="col-md-3">
             <label class="form-label">Liga</label>
             <Multiselect
               v-model="localFilters.ligaName"
               :options="availableFilters.ligaName || []"
               :searchable="true"
               :create-option="false"
-              :show-labels="false"
               placeholder="Alle Ligen"
               noOptionsText="Liste ist leer"
               noResultsText="Keine Ergebnisse gefunden"
               searchPlaceholder="Suchen..."
+              selectLabel="Enter zum Auswählen"
+              deselectLabel="Enter zum Entfernen"
+              selectedLabel="Ausgewählt"
               @change="applyFilters"
               class="custom-multiselect"
             />
           </div>
-          <div v-if="enableBezirkFilter" class="col">
-            <label class="form-label">Bezirk</label>
-            <Multiselect
-              v-model="localFilters.bezirkName"
-              :options="availableFilters.bezirkName || []"
-              :searchable="true"
-              :create-option="false"
-              :show-labels="false"
-              placeholder="Alle Bezirke"
-              noOptionsText="Liste ist leer"
-              noResultsText="Keine Ergebnisse gefunden"
-              searchPlaceholder="Suchen..."
-              @change="applyFilters"
-              class="custom-multiselect"
-            />
-          </div>
-          <div class="col">
+          <div class="col-md-3">
             <label class="form-label">SR-Lizenz</label>
             <Multiselect
               v-model="localFilters.srLizenz"
               :options="availableFilters.srLizenz || []"
               :searchable="true"
               :create-option="false"
-              :show-labels="false"
               placeholder="Alle Lizenzen"
               noOptionsText="Liste ist leer"
               noResultsText="Keine Ergebnisse gefunden"
               searchPlaceholder="Suchen..."
+              selectLabel="Enter zum Auswählen"
+              deselectLabel="Enter zum Entfernen"
+              selectedLabel="Ausgewählt"
               @change="applyFilters"
               class="custom-multiselect"
             />
           </div>
-          <div class="col">
-            <label class="form-label">Suche</label>
-            <input
-              type="text"
-              v-model="localFilters.search"
-              class="form-control"
-              placeholder="Team, Verein, Ort..."
-              @input="debounceSearch"
-            />
+          <div class="col-md-3">
+            <label class="form-label">Globale Suche</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+              </span>
+              <input
+                type="text"
+                v-model="localFilters.search"
+                class="form-control"
+                placeholder="Suche nach Team, Verein, Ort..."
+                @input="debounceSearch"
+              />
+            </div>
           </div>
-          <div class="col-auto">
+        </div>
+        <div class="row mt-3">
+          <div class="col-12 d-flex justify-content-center gap-2 flex-wrap">
             <Datepicker
               v-model="localFilters.spieldatum"
               ref="datepicker"
@@ -116,7 +113,8 @@
               :allowed-dates="availableDates"
               teleport-center
               class="custom-datepicker"
-            />
+            >
+            </Datepicker>
             <button
               type="button"
               class="btn btn-outline-secondary btn-sm datepicker-trigger"
@@ -124,16 +122,21 @@
               @click="toggleDatepicker"
             >
               <font-awesome-icon icon="fa-solid fa-calendar" class="me-1" />
-              {{ localFilters.spieldatum ? formatDateForDisplay(localFilters.spieldatum.getTime().toString()) : "Datum" }}
+              {{
+                localFilters.spieldatum
+                  ? formatDateForDisplay(
+                      localFilters.spieldatum.getTime().toString()
+                    )
+                  : "Datum auswählen"
+              }}
             </button>
-          </div>
-          <div class="col-auto">
             <button
               @click="clearFilters"
               class="btn btn-outline-secondary btn-sm"
               :disabled="loading"
             >
-              Zurücksetzen
+              <font-awesome-icon icon="fa-solid fa-undo" class="me-1" />
+              Filter zurücksetzen
             </button>
           </div>
         </div>
@@ -148,7 +151,7 @@
       :rows="games"
       :totalRows="pagination.totalItems"
       :rowStyleClass="getRowClass"
-      :isLoading.sync="loading"
+      :isLoading="loading"
       :pagination-options="{
         enabled: true,
         perPage: pagination.pageSize || 10,
@@ -161,6 +164,7 @@
         pageLabel: 'Seite',
         allLabel: 'Alle',
       }"
+      theme="nocturnal"
       :search-options="{
         enabled: false, // Server-seitige Suche
       }"
@@ -196,11 +200,6 @@
 import { ref, computed, watch } from "vue";
 import Multiselect from "vue-multiselect";
 import Datepicker from "@vuepic/vue-datepicker";
-
-const enableBezirkFilter =
-  String(import.meta.env.VITE_ENABLE_BEZIRK_FILTER || "")
-    .trim()
-    .toLowerCase() === "true";
 
 const datepicker = ref(null);
 const toggleDatepicker = () => {
@@ -272,7 +271,6 @@ const filtersCollapsed = ref(true);
 const localFilters = ref({
   spieldatum: null,
   ligaName: "",
-  bezirkName: "",
   spielfeldName: "",
   srLizenz: "",
   search: "",
@@ -293,7 +291,6 @@ const hasActiveFilters = computed(() => {
   return (
     localFilters.value.spieldatum ||
     localFilters.value.ligaName ||
-    (enableBezirkFilter && localFilters.value.bezirkName) ||
     localFilters.value.spielfeldName ||
     localFilters.value.srLizenz ||
     localFilters.value.search
@@ -305,7 +302,6 @@ const activeFiltersCount = computed(() => {
   let count = 0;
   if (localFilters.value.spieldatum) count++;
   if (localFilters.value.ligaName) count++;
-  if (enableBezirkFilter && localFilters.value.bezirkName) count++;
   if (localFilters.value.spielfeldName) count++;
   if (localFilters.value.srLizenz) count++;
   if (localFilters.value.search) count++;
@@ -336,7 +332,6 @@ const clearFilters = () => {
   localFilters.value = {
     spieldatum: null,
     ligaName: "",
-    bezirkName: "",
     spielfeldName: "",
     srLizenz: "",
     search: "",
@@ -369,8 +364,7 @@ const onColumnFilter = (params) => {
   emit("filter-change", params);
 };
 
-const columns = (() => {
-  const cols = [
+const columns = [
   {
     label: "Datum",
     field: "datum",
@@ -387,7 +381,7 @@ const columns = (() => {
     sortable: false,
   },
   {
-    label: "Halle",
+    label: "Spielfeld",
     field: "spielfeldName",
     thClass: "text-center",
     tdClass: "text-center",
@@ -420,18 +414,6 @@ const columns = (() => {
     sortable: true,
     sortField: "ligaName",
   },
-  ...(enableBezirkFilter
-    ? [
-        {
-          label: "Bezirk",
-          field: "bezirkName",
-          tdClass: "text-center",
-          thClass: "text-center",
-          sortable: true,
-          sortField: "bezirkName",
-        },
-      ]
-    : []),
   {
     label: "SR-Lizenz",
     field: "srLizenz",
@@ -464,10 +446,7 @@ const columns = (() => {
     sortable: false,
     html: true,
   },
-  ];
-
-  return cols;
-})();
+];
 
 // Datum für Anzeige formatieren
 const formatDateForDisplay = (timestamp) => {
@@ -479,7 +458,7 @@ const formatDateForDisplay = (timestamp) => {
       month: "2-digit",
       day: "2-digit",
     });
-  } catch (error) {
+  } catch {
     return "N/A";
   }
 };
@@ -512,14 +491,6 @@ watch(
 );
 
 watch(
-  () => localFilters.value.bezirkName,
-  (newVal) => {
-    if (!enableBezirkFilter) return;
-    emit("filter-change", { bezirkName: newVal?.value || newVal });
-  }
-);
-
-watch(
   () => localFilters.value.srLizenz,
   (newVal) => {
     emit("filter-change", { srLizenz: newVal?.value || newVal });
@@ -531,6 +502,27 @@ watch(
 :deep(.vgt-table) {
   --red: #dc35455b;
   --green: #1987545b;
+}
+
+:deep(.btn-primary) {
+  --bs-btn-color: #fff;
+--bs-btn-bg: #764ba2;
+--bs-btn-border-color: #764ba2;
+
+--bs-btn-hover-color: #fff;
+--bs-btn-hover-bg: #6a4392;       /* slightly darker purple */
+--bs-btn-hover-border-color: #643f89;
+
+--bs-btn-focus-shadow-rgb: 118, 75, 162; /* rgb of #764ba2 */
+
+--bs-btn-active-color: #fff;
+--bs-btn-active-bg: #5c3a7d;      /* deeper purple */
+--bs-btn-active-border-color: #553573;
+--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+
+--bs-btn-disabled-color: #fff;
+--bs-btn-disabled-bg: #a98acb;    /* lighter desaturated purple */
+--bs-btn-disabled-border-color: #a98acb;
 }
 
 :deep(.sr1-true .sr1-cell) {
@@ -557,252 +549,411 @@ watch(
   background-color: var(--red);
 }
 
-/* Filter section */
-.filters-section,
-.filters-section .form-label,
-.filters-section .form-control,
-.filters-section .btn {
-  font-size: 0.9rem;
-}
-
-.filters-section {
-  background: #f0f2f4;
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
-}
-
-.filters-header {
-  padding: 0.6rem 1rem;
-  cursor: pointer;
-  border-bottom: 1px solid #dee2e6;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.filters-header:hover {
-  background: #e9ecef;
-}
-
-.filters-header h5 {
-  color: #333333;
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin: 0;
-  display: flex;
-  align-items: center;
-}
-
-.filters-content {
-  padding: 0.2rem 0.75rem 0.4rem;
-  background: #ffffff;
-}
-
-.filters-content .form-label {
-  margin-bottom: 0.1rem;
-}
-
-/* Search input: match the fixed height of Multiselect/Datepicker/buttons */
-.filters-content input.form-control {
-  min-height: 38px;
-}
-
-.active-filters-badge {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  color: #dc3545;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-.active-filters-badge:hover {
-  text-decoration: underline;
-}
-
-.badge-count {
-  font-weight: 600;
-}
-
-/* Datepicker trigger button */
-.datepicker-trigger {
-  min-height: 38px;
-  border: 1px solid #ced4da;
-  background: #ffffff;
-  color: #333333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.datepicker-trigger.active {
-  border-color: #d78300;
-  color: #d78300;
-}
-
-/* Multiselect (vue-multiselect 3.x — BEM double-underscore naming) */
-:deep(.multiselect),
-:deep(.multiselect__input),
-:deep(.multiselect__single) {
-  font-size: 0.9rem;
-}
-
+/* Vue Multiselect Styling */
 :deep(.multiselect) {
   min-height: 38px;
   background: white;
-  border-radius: 0.25rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-:deep(.multiselect__tags) {
-  min-height: 38px;
-  padding: 6px 40px 0 6px;
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
-  background: white;
-  font-size: 0.9rem;
-}
-
-:deep(.multiselect__input) {
+:deep(.multiselect-dropdown) {
   border: none;
-  padding: 0.2rem 0.3rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: white;
+  margin-top: 2px;
+}
+
+:deep(.multiselect-option) {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+:deep(.multiselect-option:last-child) {
+  border-bottom: none;
+}
+
+:deep(.multiselect-option:hover) {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+:deep(.multiselect-option.is-selected) {
+  background: #667eea;
+  color: white;
+}
+
+:deep(.multiselect-input) {
+  border: none;
+  padding: 0.5rem;
   background: transparent;
   color: #495057;
 }
 
-:deep(.multiselect__input::placeholder) {
+:deep(.multiselect-input::placeholder) {
   color: #6c757d;
 }
 
-:deep(.multiselect__placeholder) {
-  color: #6c757d;
-  padding: 0.2rem 0.3rem;
-  font-size: 0.9rem;
+:deep(.multiselect-tags) {
+  padding: 0.25rem 0.5rem;
 }
 
-:deep(.multiselect__single) {
-  color: #495057;
-  padding: 0.2rem 0.3rem;
-  margin-bottom: 0;
-}
-
-:deep(.multiselect__tag) {
-  background: #d78300;
+:deep(.multiselect-tag) {
+  background: #667eea;
   color: white;
-  border-radius: 0.2rem;
-  padding: 0.2rem 1.5rem 0.2rem 0.4rem;
-  margin: 0.1rem;
-  font-size: 0.9rem;
-}
-
-:deep(.multiselect__tag-icon::after) {
-  color: white;
-  font-size: 0.9rem;
-}
-
-:deep(.multiselect__tag-icon:hover) {
-  background: #bf7200;
-}
-
-:deep(.multiselect__content-wrapper) {
-  border: 1px solid #dee2e6;
   border-radius: 0.25rem;
-  background: white;
-  margin-top: 1px;
-  font-size: 0.9rem;
-  min-width: 100%;
-  width: max-content;
-  max-width: min(90vw, 320px);
+  padding: 0.25rem 0.5rem;
+  margin: 0.125rem;
+  font-size: 0.875rem;
 }
 
-:deep(.multiselect__option) {
-  padding: 0.4rem 0.75rem;
+:deep(.multiselect-tag-remove) {
+  color: white;
+  margin-left: 0.5rem;
   cursor: pointer;
-  font-size: 0.9rem;
-  white-space: normal;
-  overflow-wrap: anywhere;
+  font-weight: bold;
 }
 
-:deep(.multiselect__option--highlight) {
-  background: #f8f9fa;
-  color: #212529;
+:deep(.multiselect-tag-remove:hover) {
+  color: rgba(255, 255, 255, 0.8);
 }
 
-:deep(.multiselect__option--selected) {
-  background: #d78300;
-  color: white;
-  font-weight: 500;
+:deep(.multiselect-placeholder) {
+  color: #6c757d;
+  padding: 0.5rem;
 }
 
-:deep(.multiselect__option--selected.multiselect__option--highlight) {
-  background: #bf7200;
-  color: white;
+:deep(.multiselect-single-label) {
+  color: #495057;
+  padding: 0.5rem;
 }
 
-/* Datepicker */
+:deep(.multiselect-caret) {
+  border-top: 5px solid #6c757d;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  margin-top: 0.5rem;
+}
+
+:deep(.multiselect-caret.is-open) {
+  border-top: none;
+  border-bottom: 5px solid #6c757d;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+/* Vue Datepicker Styling */
 :deep(.dp__main) {
   font-family: inherit;
 }
 
 :deep(.dp__input) {
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
-  padding: 0.4rem 0.5rem;
+  border: none;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
   background: white;
   color: #495057;
   min-height: 38px;
   width: 100%;
 }
 
+:deep(.dp__input::placeholder) {
+  color: #6c757d;
+}
+
 :deep(.dp__input:focus) {
   outline: none;
-  border-color: #d78300;
-  box-shadow: 0 0 0 0.15rem rgba(215, 131, 0, 0.2);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
 }
 
 :deep(.dp__menu) {
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
+  border: none;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   background: white;
+  margin-top: 2px;
 }
 
 :deep(.dp__calendar_header) {
-  background: #e9ecef;
-  color: #333333;
-  border-radius: 0;
+  background: #667eea;
+  color: white;
+  border-radius: 0.375rem 0.375rem 0 0;
 }
 
 :deep(.dp__calendar_header_cell) {
-  color: #333333;
+  color: white;
   font-weight: 600;
 }
 
+:deep(.dp__calendar_header_cell--clickable:hover) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 :deep(.dp__cell_inner) {
-  border-radius: 0.2rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
 }
 
 :deep(.dp__cell_inner:hover) {
-  background: #f0f2f4;
+  background: rgba(102, 126, 234, 0.1);
 }
 
 :deep(.dp__active_date) {
-  background: #d78300;
+  background: #667eea;
   color: white;
 }
 
-:deep(.dp__today) {
-  border: 2px solid #d78300;
-  color: #333333;
+:deep(.dp__active_date:hover) {
+  background: #5a6fd8;
 }
 
+:deep(.dp__today) {
+  border: 2px solid #667eea;
+  color: black;
+}
+
+:deep(.dp__today:hover) {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+:deep(.dp__arrow_bottom) {
+  border-top: 5px solid #6c757d;
+}
+
+:deep(.dp__arrow_top) {
+  border-bottom: 5px solid #6c757d;
+}
 :deep(.custom-datepicker input),
 :deep(.custom-datepicker .dp__input_icons),
 :deep(.custom-datepicker .dp__input_icon),
 :deep(.custom-datepicker .dp__input_wrap) {
   display: none !important;
 }
-
-.chevron-icon {
-  font-size: 0.9rem;
+/* Datepicker Button Styling */
+.datepicker-trigger {
+  min-height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.datepicker-trigger:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: translateY(-1px);
+}
+
+.datepicker-trigger.active {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.filters-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.filters-header {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filters-header:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Aktive Filter Badge */
+.active-filters-badge {
+  display: flex;
+  align-items: center;
+  background: rgba(220, 53, 69, 0.9);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.active-filters-badge:hover {
+  background: rgba(220, 53, 69, 1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.badge-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.badge-text {
+  margin-right: 0.25rem;
+}
+
+.filters-header h5 {
+  color: white;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chevron-icon {
+  transition: transform 0.3s ease;
+  font-size: 0.875rem;
+}
+
+.filters-header:hover .chevron-icon {
+  transform: scale(1.1);
+}
+
+.filters-content {
+  padding: 1.5rem;
+  color: white;
+}
+
+.filters-content .form-label {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.filters-content .form-control {
+  border: none;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-height: 38px;
+  padding: 0.5rem;
+  background: white;
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+.filters-content .form-control:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
+  transform: translateY(-1px);
+}
+
+.filters-content .form-control::placeholder {
+  color: #6c757d;
+}
+
+.filters-content .input-group-text {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  color: #667eea;
+  border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.filters-content .btn-outline-secondary {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.filters-content .btn-outline-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: translateY(-1px);
+}
+
+/* Vue Good Table Anpassungen */
+:deep(.vgt-table) {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+:deep(.vgt-table thead th) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 0.75rem;
+  font-weight: 600;
+}
+
+:deep(.vgt-table thead th.sortable) {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+:deep(.vgt-table thead th.sortable:hover) {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+}
+
+:deep(.vgt-table thead th.sort-asc::after) {
+  content: "↑";
+  opacity: 1;
+}
+
+:deep(.vgt-table thead th.sort-desc::after) {
+  content: "↓";
+  opacity: 1;
+}
+
+:deep(.vgt-table tbody tr) {
+  transition: all 0.3s ease;
+}
+
+:deep(.vgt-table tbody tr:hover) {
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateX(2px);
+}
+
+:deep(.vgt-table tbody td) {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+/* SR-Lizenz Styling */
+:deep(.license-cell) {
+  font-weight: 600;
+  color: #495057;
+}
+
+:deep(.license-cell:contains("LSE+")) {
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+}
+
+:deep(.license-cell:contains("LSD")) {
+  color: #fd7e14;
+  background: rgba(253, 126, 20, 0.1);
+}
+
+:deep(.license-cell:contains("LSE")) {
+  color: #198754;
+  background: rgba(25, 135, 84, 0.1);
+}
 </style>
