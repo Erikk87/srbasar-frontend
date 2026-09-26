@@ -27,7 +27,7 @@ defineProps({
   border-radius: 6px;
   background: var(--mvp-danger-soft);
   color: var(--mvp-danger);
-  font-size: 0.62rem;
+  font-size: max(calc(0.62rem * var(--mvp-small-text-scale, 1)), var(--mvp-small-text-min, 0rem));
   font-weight: 650;
   line-height: 1.4;
 }

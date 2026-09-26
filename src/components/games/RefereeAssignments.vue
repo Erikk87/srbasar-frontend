@@ -63,7 +63,7 @@ defineProps({
 
 .referee-role {
   color: var(--mvp-text-soft);
-  font-size: 0.62rem;
+  font-size: max(calc(0.62rem * var(--mvp-small-text-scale, 1)), var(--mvp-small-text-min, 0rem));
   font-weight: 650;
   line-height: 1.4;
 }
@@ -71,7 +71,7 @@ defineProps({
 .referee-club {
   min-width: 0;
   color: var(--referee-color);
-  font-size: 0.76rem;
+  font-size: max(calc(0.76rem * var(--mvp-small-text-scale, 1)), var(--mvp-small-text-min, 0rem));
   font-weight: 650;
   line-height: 1.45;
   overflow-wrap: anywhere;
@@ -82,14 +82,14 @@ defineProps({
   align-items: center;
   gap: 0.28rem;
   color: var(--referee-color);
-  font-size: 0.65rem;
+  font-size: max(calc(0.65rem * var(--mvp-small-text-scale, 1)), var(--mvp-small-text-min, 0rem));
   font-weight: 600;
   line-height: 1.4;
 }
 
 .referee-status svg {
   flex: 0 0 auto;
-  font-size: 0.6rem;
+  font-size: max(calc(0.6rem * var(--mvp-small-text-scale, 1)), var(--mvp-small-text-min, 0rem));
 }
 
 .referee-assignments--table {
@@ -106,11 +106,11 @@ defineProps({
 }
 
 .referee-assignments--table .referee-club {
-  font-size: 0.68rem;
+  font-size: max(calc(0.68rem * var(--mvp-small-text-scale, 1)), var(--mvp-small-text-min, 0rem));
 }
 
 .referee-assignments--table .referee-role,
-.referee-assignments--table .referee-status { font-size: 0.6rem; }
+.referee-assignments--table .referee-status { font-size: max(calc(0.6rem * var(--mvp-small-text-scale, 1)), var(--mvp-small-text-min, 0rem)); }
 
 .referee-assignments--detail {
   padding: 0.75rem;
