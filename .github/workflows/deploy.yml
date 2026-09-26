@@ -76,6 +76,7 @@ jobs:
           VITE_IMPRINT_URL=${{ vars.VITE_IMPRINT_URL }}
           VITE_PRIVACY_URL=${{ vars.VITE_PRIVACY_URL }}
           VITE_SUPPORT_ENABLED=${{ vars.VITE_SUPPORT_ENABLED }}
+          VITE_COMPACT_HEADING=${{ vars.VITE_COMPACT_HEADING }}
           EOF
 
       - name: Build

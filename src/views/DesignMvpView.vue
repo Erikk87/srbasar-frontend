@@ -10,8 +10,11 @@
     <div class="mvp-shell">
       <main id="mvp-main" class="mvp-main">
         <section class="basar-page" aria-labelledby="basar-title">
-          <div class="page-heading">
-            <div>
+          <div class="page-heading" :class="{ 'page-heading--compact': compactHeading }">
+            <div v-if="compactHeading">
+              <h1 id="basar-title">{{ siteTagline }}</h1>
+            </div>
+            <div v-else>
               <p class="eyebrow">{{ siteTagline }}</p>
               <h1 id="basar-title">Finde dein nächstes Spiel.</h1>
               <p class="page-intro">Vereine stellen offene Spiele ein – übernehmen sie direkt.</p>
@@ -938,6 +941,8 @@ const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || 'problems@srbasar.de'
 const imprintUrl = import.meta.env.VITE_IMPRINT_URL || ''
 const privacyUrl = import.meta.env.VITE_PRIVACY_URL || ''
 const supportEnabled = import.meta.env.VITE_SUPPORT_ENABLED !== 'false'
+// Kompakter Seitenkopf: nur eine Zeile (Tagline als Überschrift), spart vertikalen Platz
+const compactHeading = import.meta.env.VITE_COMPACT_HEADING === 'true'
 
 const quickFilters = [
   { id: 'nearby', label: 'In deiner Nähe', icon: ['fas', 'location-dot'] },
@@ -2425,6 +2430,20 @@ onUnmounted(() => {
   font-weight: 800;
   letter-spacing: -0.065em;
   line-height: 1.05;
+}
+
+.page-heading--compact {
+  align-items: center;
+  margin-bottom: 0.9rem !important;
+}
+
+.page-heading--compact h1 {
+  max-width: none;
+  margin-bottom: 0;
+  font-size: clamp(1.2rem, 3vw, 1.55rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
 .page-intro {
@@ -4769,6 +4788,11 @@ onUnmounted(() => {
 @media (max-width: 559.98px) {
   .page-heading {
     flex-direction: column;
+  }
+
+  .page-heading--compact {
+    align-items: stretch;
+    gap: 0.6rem;
   }
 
   .refresh-controls {
