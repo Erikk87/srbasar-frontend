@@ -69,6 +69,13 @@ jobs:
           VITE_APP_VERSION=${{ vars.VITE_APP_VERSION }}
           VITE_APP_DESCRIPTION=${{ vars.VITE_APP_DESCRIPTION }}
           VITE_ENABLE_BEZIRK_FILTER=${{ vars.VITE_ENABLE_BEZIRK_FILTER }}
+          VITE_SITE_NAME=${{ vars.VITE_SITE_NAME }}
+          VITE_SITE_TAGLINE=${{ vars.VITE_SITE_TAGLINE }}
+          VITE_OPERATOR_NAME=${{ vars.VITE_OPERATOR_NAME }}
+          VITE_CONTACT_EMAIL=${{ vars.VITE_CONTACT_EMAIL }}
+          VITE_IMPRINT_URL=${{ vars.VITE_IMPRINT_URL }}
+          VITE_PRIVACY_URL=${{ vars.VITE_PRIVACY_URL }}
+          VITE_SUPPORT_ENABLED=${{ vars.VITE_SUPPORT_ENABLED }}
           EOF
 
       - name: Build

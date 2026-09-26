@@ -12,7 +12,7 @@
         <section class="basar-page" aria-labelledby="basar-title">
           <div class="page-heading">
             <div>
-              <p class="eyebrow">Spielbörse für Schiedsrichter</p>
+              <p class="eyebrow">{{ siteTagline }}</p>
               <h1 id="basar-title">Finde dein nächstes Spiel.</h1>
               <p class="page-intro">Vereine stellen offene Spiele ein – übernehmen sie direkt.</p>
             </div>
@@ -442,16 +442,18 @@
       <footer class="mvp-footer">
         <div class="mvp-footer-inner">
           <div class="mvp-footer-brand">
-            <strong>SR Basar</strong>
-            <span>Spielbörse für Schiedsrichter</span>
+            <strong>{{ siteName }}</strong>
+            <span>{{ siteTagline }}</span>
           </div>
           <nav class="mvp-footer-links" aria-label="Service und Rechtliches">
-            <a class="mvp-footer-link" href="mailto:problems@srbasar.de">
+            <a class="mvp-footer-link" :href="'mailto:' + contactEmail">
               <font-awesome-icon :icon="['fas', 'envelope']" aria-hidden="true" />
               Problem melden
             </a>
-            <button class="mvp-footer-link" type="button" @click="isImprintOpen = true">Impressum</button>
-            <button class="mvp-footer-link" type="button" @click="isSupportOpen = true">
+            <a v-if="imprintUrl" class="mvp-footer-link" :href="imprintUrl" target="_blank" rel="noopener noreferrer">Impressum</a>
+            <button v-else class="mvp-footer-link" type="button" @click="isImprintOpen = true">Impressum</button>
+            <a v-if="privacyUrl" class="mvp-footer-link" :href="privacyUrl" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+            <button v-if="supportEnabled" class="mvp-footer-link" type="button" @click="isSupportOpen = true">
               <font-awesome-icon :icon="['fas', 'heart']" aria-hidden="true" />
               Unterstützen
             </button>
@@ -498,7 +500,7 @@
               </div>
             </div>
           </nav>
-          <span class="mvp-footer-copyright">© 2026 Dirk Drutschmann</span>
+          <span class="mvp-footer-copyright">© {{ copyrightYear }} {{ operatorName }}</span>
         </div>
       </footer>
     </div>
@@ -925,6 +927,16 @@ const DEFAULT_SORT_DIRECTION = 'ASC'
 const githubFrontendUrl = import.meta.env.VITE_GITHUB_FRONTEND_URL || 'https://github.com/dirkdrutschmann/srbasar-frontend'
 const githubBackendUrl = import.meta.env.VITE_GITHUB_BACKEND_URL || 'https://github.com/dirkdrutschmann/srbasar-backend'
 const paypalSupportUrl = import.meta.env.VITE_PAYPAL_SUPPORT_URL || 'https://www.paypal.com/donate'
+// Betreiberangaben; ohne gesetzte Variablen gelten die Werte des Original-Projekts.
+const siteName = import.meta.env.VITE_SITE_NAME || 'SR Basar'
+const siteTagline = import.meta.env.VITE_SITE_TAGLINE || 'Spielbörse für Schiedsrichter'
+const operatorName = import.meta.env.VITE_OPERATOR_NAME || 'Dirk Drutschmann'
+const copyrightYear = new Date().getFullYear()
+const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || 'problems@srbasar.de'
+// Externe Rechtstexte ersetzen das eingebaute Impressum
+const imprintUrl = import.meta.env.VITE_IMPRINT_URL || ''
+const privacyUrl = import.meta.env.VITE_PRIVACY_URL || ''
+const supportEnabled = import.meta.env.VITE_SUPPORT_ENABLED !== 'false'
 
 const quickFilters = [
   { id: 'nearby', label: 'In deiner Nähe', icon: ['fas', 'location-dot'] },
