@@ -10,7 +10,15 @@
     <div class="mvp-shell">
       <main id="mvp-main" class="mvp-main">
         <section class="basar-page" aria-labelledby="basar-title">
-          <div class="page-heading" :class="{ 'page-heading--compact': compactHeading }">
+          <div
+            class="page-heading"
+            :class="{
+              'page-heading--compact': compactHeading,
+              'page-heading--sticky': stickyHeading,
+              'is-condensed': stickyHeading && isHeadingCondensed
+            }"
+            :style="siteLogoStyle"
+          >
             <div v-if="compactHeading" class="page-heading-brand">
               <a v-if="siteLogo" class="page-heading-logo" :href="siteLogoLink" target="_blank" rel="noopener">
                 <img :src="siteLogo" :alt="siteLogoAlt" />
@@ -966,6 +974,16 @@ const nbbvFooter = import.meta.env.VITE_NBBV_FOOTER === 'true'
 const siteLogo = import.meta.env.VITE_SITE_LOGO ? import.meta.env.BASE_URL + import.meta.env.VITE_SITE_LOGO : ''
 const siteLogoLink = import.meta.env.VITE_SITE_LOGO_LINK || '/'
 const siteLogoAlt = import.meta.env.VITE_SITE_LOGO_ALT || siteName
+// Mitlaufender Kopf: wird beim Scrollen schmaler; vom Logo bleibt dann nur der obere
+// Anteil sichtbar (z. B. 0.63 = Bildmarke ohne Schriftzug darunter)
+const stickyHeading = compactHeading && import.meta.env.VITE_STICKY_HEADING === 'true'
+const siteLogoCondensedRatio = Number(import.meta.env.VITE_SITE_LOGO_CONDENSED_RATIO) || 1
+const siteLogoStyle = { '--logo-condensed-ratio': siteLogoCondensedRatio }
+const isHeadingCondensed = ref(false)
+
+function updateHeadingCondensed() {
+  isHeadingCondensed.value = window.scrollY > 12
+}
 
 const quickFilters = [
   { id: 'nearby', label: 'In deiner Nähe', icon: ['fas', 'location-dot'] },
@@ -2219,11 +2237,16 @@ onMounted(startAutoUpdate)
 onMounted(() => {
   updateTableViewAvailability()
   window.addEventListener('resize', updateTableViewAvailability)
+  if (stickyHeading) {
+    updateHeadingCondensed()
+    window.addEventListener('scroll', updateHeadingCondensed, { passive: true })
+  }
 })
 onUnmounted(() => {
   stopAutoUpdate()
   removeFilterDropdownViewportListeners()
   window.removeEventListener('resize', updateTableViewAvailability)
+  window.removeEventListener('scroll', updateHeadingCondensed)
 })
 </script>
 
@@ -2268,7 +2291,8 @@ onUnmounted(() => {
   position: relative;
   display: block;
   min-height: 100vh;
-  overflow-x: hidden;
+  /* clip statt hidden: erzeugt keinen Scroll-Container, damit position: sticky greift */
+  overflow-x: clip;
   background:
     radial-gradient(circle at 100% 0%, rgba(var(--mvp-brand-rgb), 0.08), transparent 30rem),
     radial-gradient(circle at 0% 65%, rgba(var(--mvp-blue-rgb), 0.07), transparent 28rem),
@@ -2478,14 +2502,56 @@ onUnmounted(() => {
 }
 
 .page-heading-logo {
+  --logo-height: 3.25rem;
   flex: 0 0 auto;
+  height: var(--logo-height);
+  overflow: hidden;
   line-height: 0;
+  transition: height 0.4s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
 .page-heading-logo img {
   display: block;
   width: auto;
-  height: 3.25rem;
+  height: var(--logo-height);
+  transition: height 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.page-heading--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  transition: padding 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* Fläche über die volle Fensterbreite, nur im eingeklappten Zustand sichtbar */
+.page-heading--sticky::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0 calc(50% - 50vw);
+  border-bottom: 1px solid var(--mvp-border);
+  background: var(--mvp-surface-solid);
+  box-shadow: var(--mvp-shadow-small);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.page-heading--sticky.is-condensed {
+  padding: 0.45rem 0;
+}
+
+.page-heading--sticky.is-condensed::before {
+  opacity: 1;
+}
+
+.page-heading--sticky.is-condensed .page-heading-logo {
+  --logo-height: 2.6rem;
+  height: calc(var(--logo-height) * var(--logo-condensed-ratio));
+}
+
+.page-heading--sticky.is-condensed h1 {
+  font-size: clamp(1.05rem, 2.4vw, 1.25rem);
 }
 
 .page-heading-tagline {
@@ -4845,8 +4911,18 @@ onUnmounted(() => {
     gap: 0.6rem;
   }
 
-  .page-heading-logo img {
-    height: 2.6rem;
+  .page-heading-logo {
+    --logo-height: 2.6rem;
+  }
+
+  .page-heading--sticky.is-condensed .page-heading-logo {
+    --logo-height: 2.2rem;
+  }
+
+  /* Am Handy im eingeklappten Zustand nur Logo und Titel */
+  .page-heading--sticky.is-condensed .refresh-controls,
+  .page-heading--sticky.is-condensed .page-heading-tagline {
+    display: none;
   }
 
   .refresh-controls {

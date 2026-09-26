@@ -83,6 +83,8 @@ jobs:
           VITE_SITE_LOGO=${{ vars.VITE_SITE_LOGO }}
           VITE_SITE_LOGO_LINK=${{ vars.VITE_SITE_LOGO_LINK }}
           VITE_SITE_LOGO_ALT=${{ vars.VITE_SITE_LOGO_ALT }}
+          VITE_SITE_LOGO_CONDENSED_RATIO=${{ vars.VITE_SITE_LOGO_CONDENSED_RATIO }}
+          VITE_STICKY_HEADING=${{ vars.VITE_STICKY_HEADING }}
           EOF
 
       - name: Build
