@@ -1,24 +1,46 @@
 name: Deploy Frontend
 
+# Server-Layout (symmetrisch zu nbv-webservices):
+#   main -> /opt/srbasar/srbasar-frontend/dist       https://nbv-sr-basar.de/
+#   dev  -> /opt/srbasar/dev/srbasar-frontend/dist   https://nbv-sr-basar.de/dev/
+# VITE_*-Variablen kommen aus den GitHub-Environments "production" bzw. "dev"
+# (Environment-Werte überschreiben gleichnamige Repository-Variablen).
+
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   workflow_dispatch:
 
 concurrency:
-  group: srbasar-frontend-deploy
+  group: srbasar-frontend-deploy-${{ github.ref_name }}
   cancel-in-progress: false
 
 env:
-  DEPLOY_PATH: /opt/srbasar/srbasar-frontend/dist
-  NODE_VERSION: '20'
+  NODE_VERSION: '24'
 
 jobs:
   deploy:
+    name: ${{ github.ref_name == 'main' && 'Prod' || 'Dev' }}-Deployment
     runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'production' || 'dev' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Zielumgebung bestimmen
+        id: target
+        run: |
+          if [ "$GITHUB_REF_NAME" = "main" ]; then
+            echo "path=/opt/srbasar/srbasar-frontend/dist" >> "$GITHUB_OUTPUT"
+            echo "base=/" >> "$GITHUB_OUTPUT"
+            echo "url=https://nbv-sr-basar.de/" >> "$GITHUB_OUTPUT"
+          elif [ "$GITHUB_REF_NAME" = "dev" ]; then
+            echo "path=/opt/srbasar/dev/srbasar-frontend/dist" >> "$GITHUB_OUTPUT"
+            echo "base=/dev/" >> "$GITHUB_OUTPUT"
+            echo "url=https://nbv-sr-basar.de/dev/" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Kein Deploy-Ziel für Branch $GITHUB_REF_NAME"; exit 1
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -29,7 +51,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Write production .env
+      - name: Write .env
         run: |
           cat > .env <<EOF
           VITE_API_BASE_URL=${{ vars.VITE_API_BASE_URL }}
@@ -47,7 +69,15 @@ jobs:
           EOF
 
       - name: Build
+        env:
+          VITE_BASE_PATH: ${{ steps.target.outputs.base }}
         run: npm run build
+
+      - name: .htaccess auf Unterpfad anpassen
+        run: |
+          BASE="${{ steps.target.outputs.base }}"
+          sed -i "s#RewriteBase /#RewriteBase ${BASE}#; s#RewriteRule \. /index\.html#RewriteRule . ${BASE}index.html#" dist/.htaccess
+          cat dist/.htaccess
 
       - name: Configure SSH
         env:
@@ -64,8 +94,8 @@ jobs:
         run: |
           rsync -az --delete \
             -e "ssh -i $HOME/.ssh/id_ed25519 -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
-            dist/ "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ env.DEPLOY_PATH }}/"
+            dist/ "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ steps.target.outputs.path }}/"
 
       - name: Health check
         run: |
-          curl --fail --silent --show-error https://nbv-sr-basar.de/ > /dev/null
+          curl --fail --silent --show-error "${{ steps.target.outputs.url }}" > /dev/null

@@ -5,6 +5,9 @@ import vueDevTools from "vite-plugin-vue-devtools";
 import { resolve } from "path";
 
 export default defineConfig({
+  // Unterpfad, unter dem die App ausgeliefert wird (Prod "/", Dev "/dev/")
+  base: process.env.VITE_BASE_PATH || "/",
+
   plugins: [vue(), vueDevTools(), sentryVitePlugin({
     org: "pronomix",
     project: "srbasar",
