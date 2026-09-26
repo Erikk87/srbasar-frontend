@@ -292,6 +292,7 @@
                 </div>
                 <div class="table-cell table-cell--league" role="cell">
                   <strong>{{ game.league }}</strong>
+                  <small v-if="game.district">{{ game.district }}</small>
                 </div>
                 <div class="table-cell table-cell--home" role="cell">
                   <strong>{{ game.homeTeam }}</strong>
@@ -945,10 +946,14 @@ const quickFilters = [
   { id: 'atRisk', label: 'Ausfall bedroht', icon: ['fas', 'triangle-exclamation'] }
 ]
 
+// Bezirk-Filter (Fork-Erweiterung), braucht ENABLE_BEZIRK_FILTER=true im Backend
+const bezirkFilterEnabled = import.meta.env.VITE_ENABLE_BEZIRK_FILTER === 'true'
+
 const filterDefinitions = [
   { id: 'source', label: 'Quelle', searchLabel: 'Quellen suchen', searchPlaceholder: 'Quelle suchen …' },
   { id: 'date', label: 'Termin', searchLabel: 'Termine suchen', searchPlaceholder: 'Termin suchen …' },
   { id: 'league', label: 'Liga', searchLabel: 'Ligen suchen', searchPlaceholder: 'Liga suchen …' },
+  ...(bezirkFilterEnabled ? [{ id: 'district', label: 'Bezirk', searchLabel: 'Bezirke suchen', searchPlaceholder: 'Bezirk suchen …' }] : []),
   { id: 'venue', label: 'Hallen', multiple: true, searchLabel: 'Hallen suchen', searchPlaceholder: 'Halle suchen …' },
   { id: 'license', label: 'Lizenzstufe', searchLabel: 'Lizenzstufen suchen', searchPlaceholder: 'Lizenzstufe suchen …' }
 ]
@@ -1070,6 +1075,7 @@ const defaultFilters = {
   date: 'Alle Termine',
   dateValue: '',
   league: 'Alle Ligen',
+  district: 'Alle Bezirke',
   venue: [],
   license: 'Alle Lizenzstufen',
   nearbyOnly: false,
@@ -1170,6 +1176,7 @@ const filterOptions = computed(() => {
     date: ['Alle Termine', 'Diese Woche', 'Dieses Wochenende', 'Nächste Woche', 'Bestimmtes Datum'],
     source: ['Alle Quellen', 'TeamSL', ...(showBallersClubFilter.value ? ['Ballers Club'] : [])],
     league: ['Alle Ligen', ...uniqueValues(liveOptions('ligaName', games.map((game) => game.league)))],
+    district: ['Alle Bezirke', ...uniqueValues(liveOptions('bezirkName', games.map((game) => game.district)))],
     venue: uniqueValues(liveOptions('spielfeldName', games.map((game) => game.venue))),
     license: ['Alle Lizenzstufen', ...uniqueValues(liveOptions('srLizenz', games.map((game) => game.license)))]
   }
@@ -1277,6 +1284,7 @@ const filteredGames = computed(() => {
       || (filters.date === 'Bestimmtes Datum' && (!filters.dateValue || getDateInputValue(new Date(game.date)) === filters.dateValue))
       || game.dateGroup === filters.date
     const matchesLeague = filters.league === defaultFilters.league || game.league === filters.league
+    const matchesDistrict = filters.district === defaultFilters.district || game.district === filters.district
     const matchesVenue = !filters.venue.length || filters.venue.includes(game.venue)
     const matchesLicense = filters.license === defaultFilters.license || game.license === filters.license
     const matchesNearby = !filters.nearbyOnly || (
@@ -1286,7 +1294,7 @@ const filteredGames = computed(() => {
     )
 
     const matchesRisk = !filters.atRiskOnly || game.isAtRisk
-    return matchesSearch && matchesDate && matchesLeague && matchesVenue && matchesLicense && matchesNearby && matchesRisk
+    return matchesSearch && matchesDate && matchesLeague && matchesDistrict && matchesVenue && matchesLicense && matchesNearby && matchesRisk
   })
 
   return [...results].sort(compareGames)
@@ -1355,6 +1363,7 @@ const liveQueryState = computed(() => ({
   date: filters.date,
   dateValue: filters.dateValue,
   league: filters.league,
+  district: filters.district,
   venue: [...filters.venue],
   license: filters.license,
   nearbyOnly: filters.nearbyOnly,
@@ -1399,6 +1408,7 @@ const activeFilterLabels = computed(() => {
     })
   }
   if (filters.league !== defaultFilters.league) labels.push({ key: 'league', label: filters.league })
+  if (filters.district !== defaultFilters.district) labels.push({ key: 'district', label: filters.district })
   if (filters.venue.length) {
     labels.push({
       key: 'venue',
@@ -1607,6 +1617,7 @@ function getLiveQueryParams() {
   const searchTerm = search.value.trim()
   if (searchTerm) params.search = searchTerm
   if (filters.league !== defaultFilters.league) params.ligaName = filters.league
+  if (bezirkFilterEnabled && filters.district !== defaultFilters.district) params.bezirkNames = filters.district
   if (filters.venue.length) params.spielfeldNames = filters.venue.join(',')
   if (filters.license === 'LSE') {
     params.srLizenzen = 'LSE'
@@ -1728,6 +1739,7 @@ function normalizeLiveGame(game, index) {
     startsIn: getStartsIn(date),
     license: game.srLizenz || 'Nicht angegeben',
     league: game.ligaName || 'Liga nicht angegeben',
+    district: game.bezirkName || '',
     homeTeam: game.heimMannschaftName || 'Heimteam',
     awayTeam: game.gastMannschaftName || 'Gastteam',
     refereeAssignments: getRefereeAssignments(game),
@@ -3096,7 +3108,8 @@ onUnmounted(() => {
   font-weight: 500;
 }
 
-.table-cell--venue > small {
+.table-cell--venue > small,
+.table-cell--league > small {
   display: block;
   margin-top: 0.16rem;
   color: var(--mvp-text-faint);
