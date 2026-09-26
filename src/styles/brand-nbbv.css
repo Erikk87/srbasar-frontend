@@ -1,116 +1,204 @@
 /*
- * NBBV-Branding für die Basar-Oberfläche (DesignMvpView).
+ * NBBV-Branding für die Spielbörse (DesignMvpView).
  *
- * Überschreibt nur die --mvp-*-Variablen aus DesignMvpView.vue, damit Updates
- * aus dem Original-Repo (dirkdrutschmann/srbasar-frontend) konfliktarm bleiben.
- * Werte nach den NBBV-Tokens aus nbbv-webservices/shared/nbbv.css.
+ * Ziel: gleiche Anmutung wie Meldeportal und SR-Abrechnung (nbbv-webservices):
+ * hell, flach, 5px-Radius, Linien statt Schatten, Navy für Text und Aktionen,
+ * Orange als Akzent und Gliederungslinie. Werte nach nbbv-webservices/shared/nbbv.css
+ * und shared/components.css.
  *
- * Die Selektoren sind absichtlich spezifischer ("html" + doppelte Klasse) als
- * die scoped Styles der View, damit sie unabhängig von der Ladereihenfolge greifen.
+ * Überschreibt fast nur --mvp-*-Variablen, damit Updates aus dem Original-Repo
+ * (dirkdrutschmann/srbasar-frontend) konfliktarm bleiben. Die Selektoren sind
+ * absichtlich spezifischer ("html" + Klasse) als die scoped Styles der View.
  */
 
-/* Schrift selbst gehostet (Source Sans 3, SIL Open Font License), keine Anfragen an Dritte */
-@font-face { font-family: "Source Sans 3"; font-weight: 400; font-style: normal; font-display: swap; src: url("../assets/fonts/source-sans-3-400.woff2") format("woff2"); }
-@font-face { font-family: "Source Sans 3"; font-weight: 600; font-style: normal; font-display: swap; src: url("../assets/fonts/source-sans-3-600.woff2") format("woff2"); }
-@font-face { font-family: "Source Sans 3"; font-weight: 700; font-style: normal; font-display: swap; src: url("../assets/fonts/source-sans-3-700.woff2") format("woff2"); }
+/* ── Schrift ───────────────────────────────────────────────────────────────────
+   Source Sans 3 selbst gehostet (SIL OFL), keine Anfragen an Dritte. Es gibt nur
+   400/600/700; die Bereiche ordnen Dirks Zwischenstärken (500, 650, 800) sauber zu. */
+@font-face { font-family: "Source Sans 3"; font-weight: 100 549; font-style: normal; font-display: swap; src: url("../assets/fonts/source-sans-3-400.woff2") format("woff2"); }
+@font-face { font-family: "Source Sans 3"; font-weight: 550 675; font-style: normal; font-display: swap; src: url("../assets/fonts/source-sans-3-600.woff2") format("woff2"); }
+@font-face { font-family: "Source Sans 3"; font-weight: 676 1000; font-style: normal; font-display: swap; src: url("../assets/fonts/source-sans-3-700.woff2") format("woff2"); }
 
-/* ── Helles Theme ─────────────────────────────────────────────────────────── */
+/* Nur helles Design, wie die übrigen NBBV-Dienste (Theme-Umschalter per VITE_FIXED_THEME aus) */
+:root {
+  color-scheme: light;
+}
+
+/* Transparent, damit im iFrame der Seitenhintergrund von nbbv.de durchscheint
+   (dort ein leichter Verlauf, kein reines Weiß) */
+html,
+body {
+  background: transparent;
+}
+
+/* ── Tokens ─────────────────────────────────────────────────────────────── */
 html .design-mvp.design-mvp {
   --mvp-font: "Source Sans 3", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 
-  /* Flächen und Text */
-  --mvp-bg: #f1f5f8;
-  --mvp-surface: rgba(255, 255, 255, 0.94);
+  /* Flächen: Seite transparent, Inhaltsflächen weiß */
+  --mvp-bg: transparent;
+  --mvp-surface: #ffffff;
   --mvp-surface-solid: #ffffff;
-  --mvp-surface-muted: #e8eff4;
-  --mvp-surface-strong: #dde6ec;
-  --mvp-text: #1c2b35;
-  --mvp-text-soft: #5a6a76;
-  --mvp-text-faint: #7d8b95;
-  --mvp-heading: #002e48;
-  --mvp-border: #d3dde4;
-  --mvp-border-strong: #b9c6cf;
+  --mvp-surface-muted: #f1f5f8;   /* --nbbv-soft */
+  --mvp-surface-strong: #e8eff4;  /* --nbbv-soft-2 */
 
-  /* Markenfarben: Orange als Akzent, Text darauf dunkelblau (wie .btn-primary) */
+  /* Text */
+  --mvp-text: #1c2b35;            /* --nbbv-text */
+  --mvp-text-soft: #5a6a76;       /* --nbbv-muted */
+  --mvp-text-faint: #7d8b95;      /* --nbbv-muted-2 */
+  --mvp-heading: #002e48;         /* --nbbv-navy */
+  --mvp-border: #d3dde4;          /* --nbbv-line */
+  --mvp-border-strong: #b9c6cf;   /* --nbbv-input-line */
+
+  /* Orange als Akzent, Text darauf Navy (wie .btn-primary) */
   --mvp-brand: #d78300;
   --mvp-brand-rgb: 215, 131, 0;
-  --mvp-brand-dark: #a86600;
-  --mvp-brand-soft: #fdf3e3;
+  --mvp-brand-dark: #d78300;
+  --mvp-brand-soft: #fdf3e3;      /* --nbbv-note-bg */
   --mvp-on-brand: #002e48;
 
-  /* Dirks Blau-Akzent (z. B. LSE) als NBBV-Dunkelblau */
-  --mvp-blue: #1f5f8b;
-  --mvp-blue-rgb: 31, 95, 139;
-  --mvp-blue-soft: #e6eef5;
+  /* Blau- und Violett-Akzente des Originals als NBBV-Navy */
+  --mvp-blue: #002e48;
+  --mvp-blue-rgb: 0, 46, 72;
+  --mvp-blue-soft: #e8eff4;
   --mvp-violet: #002e48;
-  --mvp-violet-soft: #e6eef5;
+  --mvp-violet-soft: #e8eff4;
 
   /* Status */
-  --mvp-green: #1d6b35;
+  --mvp-green: #1d6b35;           /* --nbbv-ok */
   --mvp-assigned: #1d6b35;
-  --mvp-green-soft: #e6f2ea;
-  --mvp-danger: #c62828;
+  --mvp-green-soft: #e6f2ea;      /* --nbbv-ok-bg */
+  --mvp-danger: #c62828;          /* --nbbv-danger */
   --mvp-danger-border: rgba(198, 40, 40, 0.35);
-  --mvp-danger-soft: #fdecea;
+  --mvp-danger-soft: #fdecea;     /* --nbbv-danger-bg */
   --mvp-danger-wash: rgba(198, 40, 40, 0.03);
 
-  /* Flacher und kantiger als das Original, wie die übrigen NBBV-Dienste */
-  --mvp-shadow: 0 10px 30px rgba(0, 46, 72, 0.08);
-  --mvp-shadow-small: 0 4px 14px rgba(0, 46, 72, 0.06);
-  --mvp-radius: 10px;
-  --mvp-radius-small: 6px;
+  /* Flach: Radius 5px, Schatten nur angedeutet (wie .login-box) */
+  --mvp-radius: 5px;
+  --mvp-radius-small: 5px;
+  --mvp-shadow: 0 2px 12px rgba(0, 46, 72, 0.08);
+  --mvp-shadow-small: 0 1px 4px rgba(0, 46, 72, 0.06);
 
-  /* Kleine Schrift lesbarer machen: mind. 12px, sonst +15 % */
-  --mvp-small-text-scale: 1.15;
-  --mvp-small-text-min: 0.75rem;
+  /* Kleine Schrift lesbarer, nie unter 12px (= --nbbv-fs-xs bei 16px Basis) */
+  --mvp-small-text-scale: 1.2;
+  --mvp-small-text-min: 12px;
+
+  background: transparent;
 }
 
-/* ── Dunkles Theme (auf NBBV-Dunkelblau) ──────────────────────────────────── */
-html .design-mvp.design-mvp[data-theme="dark"] {
-  --mvp-bg: #03182a;
-  --mvp-surface: rgba(8, 36, 56, 0.8);
-  --mvp-surface-solid: #0a2638;
-  --mvp-surface-muted: rgba(20, 52, 76, 0.72);
-  --mvp-surface-strong: rgba(30, 66, 94, 0.82);
-  --mvp-text: #eef3f7;
-  --mvp-text-soft: #aebfcc;
-  --mvp-text-faint: #7d8f9d;
-  --mvp-heading: #ffffff;
-  --mvp-border: rgba(174, 191, 204, 0.16);
-  --mvp-border-strong: rgba(174, 191, 204, 0.3);
+/* Glas-Effekte des Originals ergeben auf weißen Flächen keinen Sinn */
+html .design-mvp .search-panel {
+  backdrop-filter: none;
+}
 
-  --mvp-brand: #e0901a;
-  --mvp-brand-rgb: 224, 144, 26;
-  --mvp-brand-dark: #f0b454;
-  --mvp-brand-soft: rgba(224, 144, 26, 0.16);
-  --mvp-on-brand: #002e48;
-
-  --mvp-blue: #7fb3d9;
-  --mvp-blue-rgb: 127, 179, 217;
-  --mvp-blue-soft: rgba(127, 179, 217, 0.16);
-  --mvp-violet: #aecde6;
-  --mvp-violet-soft: rgba(127, 179, 217, 0.14);
-
-  --mvp-green: #5cc285;
-  --mvp-assigned: #6fd197;
-  --mvp-green-soft: rgba(92, 194, 133, 0.14);
-  --mvp-danger: #f28b8b;
-  --mvp-danger-border: rgba(242, 139, 139, 0.4);
-  --mvp-danger-soft: rgba(242, 139, 139, 0.14);
-  --mvp-danger-wash: rgba(242, 139, 139, 0.05);
-
-  --mvp-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-  --mvp-shadow-small: 0 8px 24px rgba(0, 0, 0, 0.24);
+/* ── Gliederung: Orange als Linie (wie .login-box / .form-section) ────────── */
+html .design-mvp .search-panel {
+  border-top: 3px solid var(--mvp-brand);
 }
 
 /* Überschrift: Source Sans 3 wirkt mit Inters enger Laufweite zu gedrungen */
 html .design-mvp .page-heading h1 {
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
-/* Tastaturfokus in Markenorange, wie in den übrigen NBBV-Diensten */
+/* ── Karten und Tabelle ───────────────────────────────────────────────────── */
+html .design-mvp .game-card {
+  border-radius: var(--mvp-radius);
+  box-shadow: none;
+}
+
+/* Tabellenkopf wie im Meldeportal: helle Fläche, Navy, halbfett */
+html .design-mvp .game-table-header {
+  background: var(--mvp-surface-muted);
+  color: var(--mvp-heading);
+  font-weight: 600;
+}
+
+/* ── Eingabefelder wie im Meldeportal ─────────────────────────────────────── */
+html .design-mvp .search-input {
+  border-color: var(--mvp-border-strong);
+  border-radius: var(--mvp-radius);
+  background: #ffffff;
+}
+
+html .design-mvp .search-input:hover {
+  border-color: var(--mvp-heading);
+}
+
+/* ── Buttons nach Rolle (components.css): andere Aktionen Navy ────────────── */
+html .design-mvp .secondary-action,
+html .design-mvp .filter-button {
+  border-color: var(--mvp-heading);
+  background: #ffffff;
+  color: var(--mvp-heading);
+  box-shadow: none;
+}
+
+/* Hover wie in den übrigen Diensten: leicht transparent, kein Anheben */
+html .design-mvp .secondary-action:hover,
+html .design-mvp .filter-button:hover,
+html .design-mvp .primary-action:hover {
+  transform: none;
+  opacity: 0.8;
+}
+
+html .design-mvp .secondary-action:hover,
+html .design-mvp .filter-button:hover {
+  border-color: var(--mvp-heading);
+  color: var(--mvp-heading);
+}
+
+html .design-mvp .primary-action:hover {
+  background: var(--mvp-brand);
+  box-shadow: none;
+}
+
+html .design-mvp .primary-action {
+  box-shadow: none;
+}
+
+/* Schalter und Häkchen in Navy (wie accent-color im Meldeportal) */
+html .design-mvp .toggle-track.is-active {
+  background: var(--mvp-heading);
+}
+
+html .design-mvp .risk-filter-toggle .toggle-track.is-active {
+  background: var(--mvp-danger);
+}
+
+html .design-mvp .auto-update-toggle input:checked + .auto-update-check {
+  border-color: var(--mvp-heading);
+  background: var(--mvp-heading);
+}
+
+/* ── Links: Navy, halbfett, Hover Orange ──────────────────────────────────── */
+html .design-mvp .mvp-footer {
+  background: transparent;
+}
+
+html .design-mvp .mvp-footer-link,
+html .design-mvp .mvp-footer-copyright a {
+  color: var(--mvp-heading);
+  font-weight: 600;
+}
+
+html .design-mvp .mvp-footer-link:hover,
+html .design-mvp .mvp-footer-copyright a:hover {
+  color: var(--mvp-brand);
+}
+
+/* Tastaturfokus in Markenorange */
 html .design-mvp :focus-visible {
   outline: 2px solid var(--mvp-brand);
   outline-offset: 2px;
+}
+
+/* ── Smartphone ───────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  /* Eingabefelder mind. 16px, sonst zoomt iOS beim Antippen hinein */
+  html .design-mvp input:not([type="checkbox"]):not([type="radio"]),
+  html .design-mvp select,
+  html .design-mvp textarea {
+    font-size: 16px;
+  }
 }

@@ -48,6 +48,7 @@
                 </button>
               </div>
               <button
+                v-if="!fixedTheme"
                 class="secondary-action theme-toggle"
                 type="button"
                 :aria-pressed="theme === 'dark'"
@@ -136,7 +137,7 @@
 
           <div class="results-heading">
             <div>
-              <p class="eyebrow">Für dich ausgewählt</p>
+              <p v-if="!compactHeading" class="eyebrow">Für dich ausgewählt</p>
               <h2>Offene Spiele <span class="result-count">{{ resultCount }}</span></h2>
               <p class="results-meta">Zuletzt aktualisiert {{ lastUpdated }}</p>
             </div>
@@ -504,7 +505,14 @@
               </div>
             </div>
           </nav>
-          <span class="mvp-footer-copyright">© {{ copyrightYear }} {{ operatorName }}</span>
+          <span class="mvp-footer-copyright">
+            © {{ copyrightYear }} {{ operatorName }}
+            <template v-if="showUpstreamCredit">
+              · basiert auf
+              <a href="https://github.com/dirkdrutschmann/srbasar-frontend" target="_blank" rel="noopener noreferrer">SR Basar</a>
+              von Dirk Drutschmann
+            </template>
+          </span>
         </div>
       </footer>
     </div>
@@ -943,6 +951,10 @@ const privacyUrl = import.meta.env.VITE_PRIVACY_URL || ''
 const supportEnabled = import.meta.env.VITE_SUPPORT_ENABLED !== 'false'
 // Kompakter Seitenkopf: nur eine Zeile (Tagline als Überschrift), spart vertikalen Platz
 const compactHeading = import.meta.env.VITE_COMPACT_HEADING === 'true'
+// Festes Theme ("light"/"dark") blendet den Umschalter aus und speichert nichts im Browser
+const fixedTheme = ['light', 'dark'].includes(import.meta.env.VITE_FIXED_THEME) ? import.meta.env.VITE_FIXED_THEME : null
+// Hinweis auf das Original-Projekt, sobald jemand anderes die Instanz betreibt
+const showUpstreamCredit = operatorName !== 'Dirk Drutschmann'
 
 const quickFilters = [
   { id: 'nearby', label: 'In deiner Nähe', icon: ['fas', 'location-dot'] },
@@ -1430,6 +1442,7 @@ const activeFilterLabels = computed(() => {
 const filterCount = computed(() => activeFilterLabels.value.length)
 
 function getInitialTheme() {
+  if (fixedTheme) return fixedTheme
   if (typeof window === 'undefined') return 'light'
 
   try {

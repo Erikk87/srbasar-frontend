@@ -77,6 +77,7 @@ jobs:
           VITE_PRIVACY_URL=${{ vars.VITE_PRIVACY_URL }}
           VITE_SUPPORT_ENABLED=${{ vars.VITE_SUPPORT_ENABLED }}
           VITE_COMPACT_HEADING=${{ vars.VITE_COMPACT_HEADING }}
+          VITE_FIXED_THEME=${{ vars.VITE_FIXED_THEME }}
           EOF
 
       - name: Build
