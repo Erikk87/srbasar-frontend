@@ -14,6 +14,7 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import "./styles/globals.css";
 import "./styles/app.css";
 import "./styles/nbbv.css";
+import "./styles/nbbv-header.css";
 import "./styles/brand-nbbv.css";
 
 // Font Awesome

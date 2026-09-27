@@ -8,21 +8,21 @@
     <a class="skip-link" href="#mvp-main">Zum Inhalt springen</a>
 
     <div class="mvp-shell">
+      <NbbvHeader
+        v-if="nbbvHeader"
+        :name="siteName"
+        :sub="siteTagline"
+        :logo="siteLogo"
+        :logo-link="siteLogoLink"
+        :logo-alt="siteLogoAlt"
+      />
       <main id="mvp-main" class="mvp-main">
         <section class="basar-page" aria-labelledby="basar-title">
           <div
             class="page-heading"
-            :class="{
-              'page-heading--compact': compactHeading,
-              'page-heading--sticky': stickyHeading,
-              'is-condensed': stickyHeading && isHeadingCondensed
-            }"
-            :style="siteLogoStyle"
+            :class="{ 'page-heading--compact': compactHeading, 'page-heading--in-nbbv-header': nbbvHeader }"
           >
-            <div v-if="compactHeading" class="page-heading-brand">
-              <a v-if="siteLogo" class="page-heading-logo" :href="siteLogoLink" target="_blank" rel="noopener">
-                <img :src="siteLogo" :alt="siteLogoAlt" />
-              </a>
+            <div v-if="compactHeading">
               <h1 id="basar-title">{{ siteName }} <span class="page-heading-tagline">{{ siteTagline }}</span></h1>
             </div>
             <div v-else>
@@ -30,6 +30,7 @@
               <h1 id="basar-title">Finde dein nächstes Spiel.</h1>
               <p class="page-intro">Vereine stellen offene Spiele ein – übernehmen sie direkt.</p>
             </div>
+            <Teleport to="#nbbv-header-actions" :disabled="!nbbvHeader" defer>
             <div class="refresh-controls">
               <label class="auto-update-toggle">
                 <input v-model="autoUpdateEnabled" type="checkbox" @change="toggleAutoUpdate" />
@@ -69,6 +70,7 @@
                 <font-awesome-icon :icon="theme === 'light' ? ['fas', 'moon'] : ['fas', 'sun']" aria-hidden="true" />
               </button>
             </div>
+            </Teleport>
           </div>
 
           <section class="search-panel" aria-label="Spiele durchsuchen">
@@ -932,6 +934,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GamesService from '@/services/games.service.js'
 import RefereeAssignments from '@/components/games/RefereeAssignments.vue'
 import NbbvFooter from '@/components/layout/NbbvFooter.vue'
+import NbbvHeader from '@/components/layout/NbbvHeader.vue'
 import GameRiskBadge from '@/components/games/GameRiskBadge.vue'
 import BallersClubCard from '@/modules/ballersclub/BallersClubCard.vue'
 import BallersClubRow from '@/modules/ballersclub/BallersClubRow.vue'
@@ -970,20 +973,12 @@ const fixedTheme = ['light', 'dark'].includes(import.meta.env.VITE_FIXED_THEME) 
 const showUpstreamCredit = operatorName !== 'Dirk Drutschmann'
 // Fork-Erweiterung: Fußzeile im Stil der übrigen NBBV-Dienste
 const nbbvFooter = import.meta.env.VITE_NBBV_FOOTER === 'true'
-// Logo im kompakten Kopf; Dateiname relativ zum Basispfad (public/), z. B. "logo.png"
+// Logo im NBBV-Kopf; Dateiname relativ zum Basispfad (public/), z. B. "logo.png"
 const siteLogo = import.meta.env.VITE_SITE_LOGO ? import.meta.env.BASE_URL + import.meta.env.VITE_SITE_LOGO : ''
 const siteLogoLink = import.meta.env.VITE_SITE_LOGO_LINK || '/'
 const siteLogoAlt = import.meta.env.VITE_SITE_LOGO_ALT || siteName
-// Mitlaufender Kopf: wird beim Scrollen schmaler; vom Logo bleibt dann nur der obere
-// Anteil sichtbar (z. B. 0.63 = Bildmarke ohne Schriftzug darunter)
-const stickyHeading = compactHeading && import.meta.env.VITE_STICKY_HEADING === 'true'
-const siteLogoCondensedRatio = Number(import.meta.env.VITE_SITE_LOGO_CONDENSED_RATIO) || 1
-const siteLogoStyle = { '--logo-condensed-ratio': siteLogoCondensedRatio }
-const isHeadingCondensed = ref(false)
-
-function updateHeadingCondensed() {
-  isHeadingCondensed.value = window.scrollY > 12
-}
+// Fork-Erweiterung: gemeinsamer Seitenkopf der NBBV-Dienste (NbbvHeader.vue) statt des eigenen
+const nbbvHeader = import.meta.env.VITE_NBBV_HEADER === 'true'
 
 const quickFilters = [
   { id: 'nearby', label: 'In deiner Nähe', icon: ['fas', 'location-dot'] },
@@ -2237,16 +2232,11 @@ onMounted(startAutoUpdate)
 onMounted(() => {
   updateTableViewAvailability()
   window.addEventListener('resize', updateTableViewAvailability)
-  if (stickyHeading) {
-    updateHeadingCondensed()
-    window.addEventListener('scroll', updateHeadingCondensed, { passive: true })
-  }
 })
 onUnmounted(() => {
   stopAutoUpdate()
   removeFilterDropdownViewportListeners()
   window.removeEventListener('resize', updateTableViewAvailability)
-  window.removeEventListener('scroll', updateHeadingCondensed)
 })
 </script>
 
@@ -2494,64 +2484,9 @@ onUnmounted(() => {
   line-height: 1.2;
 }
 
-.page-heading-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  min-width: 0;
-}
-
-.page-heading-logo {
-  --logo-height: 3.25rem;
-  flex: 0 0 auto;
-  height: var(--logo-height);
-  overflow: hidden;
-  line-height: 0;
-  transition: height 0.4s cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.page-heading-logo img {
-  display: block;
-  width: auto;
-  height: var(--logo-height);
-  transition: height 0.4s cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.page-heading--sticky {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  transition: padding 0.4s cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-/* Fläche über die volle Fensterbreite, nur im eingeklappten Zustand sichtbar */
-.page-heading--sticky::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0 calc(50% - 50vw);
-  border-bottom: 1px solid var(--mvp-border);
-  background: var(--mvp-surface-solid);
-  box-shadow: var(--mvp-shadow-small);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.page-heading--sticky.is-condensed {
-  padding: 0.45rem 0;
-}
-
-.page-heading--sticky.is-condensed::before {
-  opacity: 1;
-}
-
-.page-heading--sticky.is-condensed .page-heading-logo {
-  --logo-height: 2.6rem;
-  height: calc(var(--logo-height) * var(--logo-condensed-ratio));
-}
-
-.page-heading--sticky.is-condensed h1 {
-  font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+/* Im NBBV-Kopf (NbbvHeader) wandern die Aktionen per Teleport dorthin */
+.page-heading--in-nbbv-header {
+  display: none;
 }
 
 .page-heading-tagline {
@@ -4911,19 +4846,6 @@ onUnmounted(() => {
     gap: 0.6rem;
   }
 
-  .page-heading-logo {
-    --logo-height: 2.6rem;
-  }
-
-  .page-heading--sticky.is-condensed .page-heading-logo {
-    --logo-height: 2.2rem;
-  }
-
-  /* Am Handy im eingeklappten Zustand nur Logo und Titel */
-  .page-heading--sticky.is-condensed .refresh-controls,
-  .page-heading--sticky.is-condensed .page-heading-tagline {
-    display: none;
-  }
 
   .refresh-controls {
     width: 100%;

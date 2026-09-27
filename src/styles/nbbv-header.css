@@ -1,0 +1,188 @@
+/*
+ * Kopie von nbbv-webservices/shared/header.css (gemeinsamer Seitenkopf aller NBBV-Dienste).
+ * Bei Änderungen dort hier nachziehen. Anpassungen für die Spielbörse stehen am Ende.
+ */
+
+.nbbv-header {
+    --logo-img: 52px;              /* Höhe des ganzen Logos */
+    --logo-box: 52px;              /* sichtbarer Ausschnitt */
+    --logo-mark: 0.63;             /* Anteil der Bildmarke ohne Schriftzug */
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    margin-bottom: 12px;
+    background: #fff;
+    border-bottom: 1px solid var(--nbbv-line);
+    box-shadow: 0 2px 12px rgba(0, 46, 72, 0);
+    transition: box-shadow 0.3s ease;
+}
+
+.nbbv-header-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: var(--nbbv-header-max, 1600px);
+    margin: 0 auto;
+    padding: 10px 12px;
+    text-align: left;
+    transition: padding 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.nbbv-header-logo {
+    flex: none;
+    height: var(--logo-box);
+    overflow: hidden;
+    line-height: 0;
+    transition: height 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.nbbv-header-logo img {
+    display: block;
+    width: auto;
+    height: var(--logo-img);
+    transition: height 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.nbbv-header-title {
+    min-width: 0;
+    margin: 0;
+    color: var(--nbbv-navy);
+    font-size: 1.5em;
+    font-weight: 400;
+    line-height: 1.2;
+    text-align: left;
+    transition: font-size 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.nbbv-header-name {
+    font-weight: 700;
+}
+
+.nbbv-header-sub {
+    color: var(--nbbv-muted);
+    font-size: 0.7em;
+}
+
+.nbbv-header-embedded {
+    display: none;
+}
+
+.nbbv-header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+/* ── Eingeklappt (beim Scrollen) ──────────────────────────────────────────── */
+.nbbv-header.is-condensed {
+    --logo-img: 44px;
+    --logo-box: calc(44px * var(--logo-mark));
+    box-shadow: 0 2px 12px rgba(0, 46, 72, 0.08);
+}
+
+.nbbv-header.is-condensed .nbbv-header-inner {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.nbbv-header.is-condensed .nbbv-header-title {
+    font-size: 1.2em;
+}
+
+/* ── Eingebettet (iFrame auf nbbv.de) ─────────────────────────────────────── */
+html.embedded .nbbv-header {
+    position: static;
+    background: none;
+    border-bottom: 0;
+    box-shadow: none;
+}
+
+html.embedded .nbbv-header-logo,
+html.embedded .nbbv-header-name,
+html.embedded .nbbv-header-sub {
+    display: none;
+}
+
+html.embedded .nbbv-header-embedded {
+    display: inline;
+    font-weight: 700;
+}
+
+/* ── Breakpoints wie in den Diensten: ≤ 900px Tablet, ≤ 600px Smartphone ──── */
+@media (max-width: 900px) {
+    .nbbv-header {
+        --logo-img: 44px;
+        --logo-box: 44px;
+    }
+    .nbbv-header-title {
+        font-size: 1.35em;
+    }
+}
+
+@media (max-width: 600px) {
+    .nbbv-header {
+        --logo-img: 40px;
+        --logo-box: 40px;
+    }
+    .nbbv-header.is-condensed {
+        --logo-img: 36px;
+        --logo-box: calc(36px * var(--logo-mark));
+    }
+    .nbbv-header-inner {
+        flex-wrap: wrap;
+        gap: 8px 12px;
+        padding: 8px;
+    }
+    .nbbv-header-title {
+        font-size: 1.25em;
+    }
+    .nbbv-header-actions {
+        margin-left: 0;
+        width: 100%;
+    }
+    /* Eingeklappt am Handy nur Bildmarke und Name */
+    .nbbv-header.is-condensed .nbbv-header-sub,
+    .nbbv-header.is-condensed .nbbv-header-actions {
+        display: none;
+    }
+}
+
+/* ── Anpassungen Spielbörse ───────────────────────────────────────────────────
+   Basis 16/15/14 px wie in den PHP-Diensten (hier ist body kleiner gesetzt).
+   Breite und Seitenränder wie .mvp-main, damit der Kopf bündig mit dem Inhalt steht. */
+.nbbv-header {
+    --nbbv-header-max: 1180px;
+    font-family: var(--nbbv-font);
+    font-size: 16px;
+}
+
+.nbbv-header-inner {
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+@media (min-width: 560px) {
+    .nbbv-header-inner { padding-right: 1.5rem; padding-left: 1.5rem; }
+}
+
+@media (min-width: 768px) {
+    .nbbv-header-inner { padding-right: 2rem; padding-left: 2rem; }
+}
+
+@media (min-width: 1024px) {
+    .nbbv-header-inner { padding-right: 2.5rem; padding-left: 2.5rem; }
+}
+
+@media (min-width: 1280px) {
+    .nbbv-header-inner { padding-right: 4rem; padding-left: 4rem; }
+}
+
+@media (max-width: 900px) {
+    .nbbv-header { font-size: 15px; }
+}
+
+@media (max-width: 600px) {
+    .nbbv-header { font-size: 14px; }
+}
