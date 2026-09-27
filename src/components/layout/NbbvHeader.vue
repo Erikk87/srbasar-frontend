@@ -7,7 +7,6 @@
       </a>
       <h1 class="nbbv-header-title">
         <span class="nbbv-header-name">{{ name }}</span>{{ ' ' }}<span class="nbbv-header-sub">{{ sub }}</span>
-        <span class="nbbv-header-embedded">{{ embeddedTitle || `${name} ${sub}` }}</span>
       </h1>
       <!-- Ziel für Aktionen der Seite (per Teleport, z. B. Aktualisieren) -->
       <div id="nbbv-header-actions" class="nbbv-header-actions"></div>
@@ -21,7 +20,6 @@ import { onMounted, onUnmounted, ref } from 'vue'
 defineProps({
   name: { type: String, required: true },
   sub: { type: String, default: '' },
-  embeddedTitle: { type: String, default: '' },
   logo: { type: String, default: '' },
   logoLink: { type: String, default: 'https://www.nbbv.de' },
   logoAlt: { type: String, default: 'Niedersächsisch-Bremischer Basketballverband e.V.' }

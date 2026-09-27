@@ -63,10 +63,6 @@
     font-size: 0.7em;
 }
 
-.nbbv-header-embedded {
-    display: none;
-}
-
 .nbbv-header-actions {
     display: flex;
     flex-wrap: wrap;
@@ -100,14 +96,13 @@ html.embedded .nbbv-header {
 }
 
 html.embedded .nbbv-header-logo,
-html.embedded .nbbv-header-name,
-html.embedded .nbbv-header-sub {
+html.embedded .nbbv-header-title {
     display: none;
 }
 
-html.embedded .nbbv-header-embedded {
-    display: inline;
-    font-weight: 700;
+/* Ohne Aktionen bleibt eingebettet gar kein Kopf übrig */
+html.embedded .nbbv-header:not(:has(.nbbv-header-actions > *)) {
+    display: none;
 }
 
 /* ── Breakpoints wie in den Diensten: ≤ 900px Tablet, ≤ 600px Smartphone ──── */
