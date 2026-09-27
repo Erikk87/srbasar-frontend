@@ -136,6 +136,8 @@ html.embedded .nbbv-header-embedded {
         padding: 8px;
     }
     .nbbv-header-title {
+        /* neben dem Logo bleiben und dort umbrechen statt in eine eigene Zeile zu rutschen */
+        flex: 1 1 0;
         font-size: 1.25em;
     }
     .nbbv-header-actions {
