@@ -28,12 +28,14 @@ defineProps({
 // Wie shared/header.js: Einbettung erkennen und beim Scrollen einklappen
 const isCondensed = ref(false)
 
-function update() {
-  isCondensed.value = window.scrollY > 12
+const isEmbedded = typeof window !== 'undefined' && window.self !== window.top
+if (isEmbedded) {
+  document.documentElement.classList.add('embedded')
 }
 
-if (typeof window !== 'undefined' && window.self !== window.top) {
-  document.documentElement.classList.add('embedded')
+function update() {
+  // Eingebettet läuft der Kopf nicht mit, also auch kein Einklappen
+  isCondensed.value = !isEmbedded && window.scrollY > 12
 }
 
 onMounted(() => {

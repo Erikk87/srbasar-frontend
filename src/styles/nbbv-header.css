@@ -95,14 +95,12 @@ html.embedded .nbbv-header {
     box-shadow: none;
 }
 
-html.embedded .nbbv-header-logo,
-html.embedded .nbbv-header-title {
+html.embedded .nbbv-header-logo {
     display: none;
 }
 
-/* Ohne Aktionen bleibt eingebettet gar kein Kopf übrig */
-html.embedded .nbbv-header:not(:has(.nbbv-header-actions > *)) {
-    display: none;
+html.embedded .nbbv-header-inner {
+    padding-top: 0;
 }
 
 /* ── Breakpoints wie in den Diensten: ≤ 900px Tablet, ≤ 600px Smartphone ──── */
