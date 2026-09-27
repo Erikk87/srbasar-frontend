@@ -47,6 +47,8 @@ const infoUrl = import.meta.env.VITE_INFO_URL || ''
 .nbbv-footer p {
   max-width: 75ch;
   margin: 4px auto;
+  /* app.css des Originals färbt alle Absätze weiß (altes dunkles Layout) */
+  color: inherit;
 }
 
 .nbbv-footer a {
