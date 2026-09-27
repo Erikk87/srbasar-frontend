@@ -1,13 +1,14 @@
 <template>
-  <!-- Fußzeile wie in Meldeportal und SR-Abrechnung (nbbv-webservices) -->
+  <!-- Fußzeile wie in Meldeportal und SR-Abrechnung (nbbv-webservices, footer in shared/components.css):
+       Angebot · Maßgeblich · Kontakt/Impressum/Datenschutz -->
   <footer class="nbbv-footer">
     <p>
       Ein Angebot des
       <a href="https://www.nbbv.de" target="_blank" rel="noopener">Niedersächsisch-Bremischen Basketballverbands e.V.</a>
-      <template v-if="infoUrl">
-        Infos, Anleitung für Vereine und Durchführungsbestimmungen findest du
-        <a :href="infoUrl" target="_blank" rel="noopener">auf nbbv.de</a>.
-      </template>
+    </p>
+    <p v-if="infoUrl">
+      Maßgeblich:
+      <a :href="infoUrl" target="_blank" rel="noopener">Durchführungsbestimmungen und Anleitung</a>
     </p>
     <p>
       <a :href="contactHref">Kontakt: {{ contactEmail }}</a>
@@ -37,10 +38,10 @@ const infoUrl = import.meta.env.VITE_INFO_URL || ''
 .nbbv-footer {
   width: 100%;
   margin-top: 24px;
-  padding: 10px 16px 20px;
+  padding: 10px;
   color: var(--nbbv-muted);
   font-size: 0.85rem;           /* entspricht --nbbv-fs-small bei 16px Basis */
-  line-height: 1.4;
+  line-height: 1.35;
   text-align: center;
 }
 
