@@ -1,3 +1,9 @@
+// Standort nur gerundet weitergeben: 2 Nachkommastellen sind etwa 1 km, genug für die
+// Umkreissuche. So landen keine genauen Standorte beim Server (NBBV-Datenschutz).
+export function roundCoordinate(value) {
+  return Math.round(value * 100) / 100
+}
+
 export function requestUserLocation() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
@@ -8,8 +14,8 @@ export function requestUserLocation() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         resolve({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
+          latitude: roundCoordinate(position.coords.latitude),
+          longitude: roundCoordinate(position.coords.longitude)
         })
       },
       (error) => {
