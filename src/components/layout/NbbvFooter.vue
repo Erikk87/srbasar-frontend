@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-const siteName = import.meta.env.VITE_SITE_NAME || 'NBBV-Spielbörse'
+const siteName = import.meta.env.VITE_SITE_NAME || 'NBBV-Spielebörse'
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || 'support@nbbv.de'
 const contactHref = `mailto:${contactEmail}?subject=${encodeURIComponent(siteName)}`
 const imprintUrl = import.meta.env.VITE_IMPRINT_URL || 'https://www.nbbv.de/de/rechtliches/impressum/'

@@ -1,6 +1,6 @@
 /*
  * Kopie von nbbv-webservices/shared/header.css (gemeinsamer Seitenkopf aller NBBV-Dienste).
- * Bei Änderungen dort hier nachziehen. Anpassungen für die Spielbörse stehen am Ende.
+ * Bei Änderungen dort hier nachziehen. Anpassungen für die Spielebörse stehen am Ende.
  */
 
 .nbbv-header {
@@ -144,7 +144,7 @@ html.embedded .nbbv-header-inner {
     }
 }
 
-/* ── Anpassungen Spielbörse ───────────────────────────────────────────────────
+/* ── Anpassungen Spielebörse ───────────────────────────────────────────────────
    Basis 16/15/14 px wie in den PHP-Diensten (hier ist body kleiner gesetzt).
    Breite und Seitenränder wie .mvp-main, damit der Kopf bündig mit dem Inhalt steht. */
 .nbbv-header {
