@@ -1,8 +1,8 @@
 name: Test Frontend
 
-# Die Oberfläche wird nicht mehr von hier deployt: deploy-spielboerse.yml im Repo
+# Die Oberfläche wird nicht mehr von hier deployt: deploy-spieleboerse.yml im Repo
 # Erikk87/nbbv-webservices baut sie aus .env.strato und legt sie nach
-# nbbv-basketball.de/[dev/]spielboerse/ (prüft alle 15 Minuten auf Änderungen).
+# nbbv-basketball.de/[dev/]spieleboerse/ (prüft alle 15 Minuten auf Änderungen).
 # Hier nur Lint, Unit-Tests und Build für den Arbeits-Branch dev
 # (main und Pull Requests testet ci-cd.yml aus dem Original-Repo).
 
@@ -25,4 +25,4 @@ jobs:
       # Build wie auf Strato, damit Fehler vor dem Deploy auffallen
       - run: npx vite build --mode strato
         env:
-          VITE_BASE_PATH: /spielboerse/
+          VITE_BASE_PATH: /spieleboerse/

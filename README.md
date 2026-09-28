@@ -1,3 +1,24 @@
+# Spielebörse (NBBV) – Frontend
+
+> **NBBV-Betrieb.** Dieses Repo ist ein Fork von [dirkdrutschmann/srbasar-frontend](https://github.com/dirkdrutschmann/srbasar-frontend)
+> (Remote `upstream`) und läuft beim NBBV als **Spielebörse** unter https://nbbv-basketball.de/spieleboerse/
+> (Dev: `/dev/spieleboerse/`). Die API kommt aus [Erikk87/srbasar-backend](https://github.com/Erikk87/srbasar-backend)
+> auf nbbv-sr-basar.de. Die Spielebörse gehört zu den NBBV-Webservices, gemeinsame Konventionen für Texte und
+> Design: [Erikk87/nbbv-webservices](https://github.com/Erikk87/nbbv-webservices) (CLAUDE.md).
+>
+> - **Deploy:** nicht aus diesem Repo. `deploy-spieleboerse.yml` in nbbv-webservices baut Branch `dev` bzw. `main`
+>   mit `vite build --mode strato` (Einstellungen in `.env.strato`) und lädt das Ergebnis auf den Strato-Webspace.
+>   Er prüft alle 15 Minuten, ob sich hier etwas geändert hat. `test.yml` prüft Lint, Tests und Build auf `dev`.
+> - **Branches:** `dev` → Dev, `main` → Prod. Auf `main` nur per PR von `dev`.
+> - **NBBV-eigene Dateien:** `.env.strato`, `src/components/layout/NbbvHeader.vue` und `NbbvFooter.vue`,
+>   `src/styles/brand-nbbv.css`, `src/styles/nbbv.css` und `nbbv-header.css` (Kopien aus nbbv-webservices `shared/`,
+>   bei Änderungen dort nachziehen). Anpassungen möglichst über `VITE_*`-Variablen, damit Upstream-Merges einfach bleiben.
+> - **Texte:** „Spielebörse“, „Schiedsrichter:innen“, „Team“, Du-Form. Kontakt support@nbbv.de.
+>
+> Ab hier folgt die README des Originalprojekts. Server, Domains und Deploy darin gelten nicht für den NBBV-Betrieb.
+
+---
+
 # Spielebasar Frontend
 
 Ein modernes Vue.js Frontend für das Spielebasar System, entwickelt mit Vite und Vue 3.
