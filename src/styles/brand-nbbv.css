@@ -6,8 +6,8 @@
  * Orange als Akzent und Gliederungslinie. Werte nach nbbv-webservices/shared/nbbv.css
  * und shared/components.css; Tokens --nbbv-* kommen aus styles/nbbv.css (Kopie).
  *
- * Überschreibt fast nur --mvp-*-Variablen, damit Updates aus dem Original-Repo
- * (dirkdrutschmann/srbasar-frontend) konfliktarm bleiben. Die Selektoren sind
+ * Farben, Formen und Schriftstufen stehen seit 2026-09-29 direkt in DesignMvpView.vue
+ * (--mvp-* aus den NBBV-Tokens); hier nur noch Ergänzungen. Die Selektoren sind
  * absichtlich spezifischer ("html" + Klasse) als die scoped Styles der View.
  */
 
@@ -18,7 +18,7 @@
 @font-face { font-family: "Source Sans 3"; font-weight: 550 675; font-style: normal; font-display: swap; src: url("../assets/fonts/source-sans-3-600.woff2") format("woff2"); }
 @font-face { font-family: "Source Sans 3"; font-weight: 676 1000; font-style: normal; font-display: swap; src: url("../assets/fonts/source-sans-3-700.woff2") format("woff2"); }
 
-/* Nur helles Design, wie die übrigen NBBV-Dienste (Theme-Umschalter per VITE_FIXED_THEME aus) */
+/* Nur helles Design, wie die übrigen NBBV-Dienste */
 :root {
   color-scheme: light;
 }
@@ -30,59 +30,16 @@ body {
   background: transparent;
 }
 
-/* ── Tokens ─────────────────────────────────────────────────────────────── */
-html .design-mvp.design-mvp {
-  --mvp-font: var(--nbbv-font);
-
-  /* Flächen: Seite transparent, Inhaltsflächen weiß */
-  --mvp-bg: transparent;
-  --mvp-surface: #ffffff;
-  --mvp-surface-solid: #ffffff;
-  --mvp-surface-muted: var(--nbbv-soft);
-  --mvp-surface-strong: var(--nbbv-soft-2);
-
-  /* Text */
-  --mvp-text: var(--nbbv-text);
-  --mvp-text-soft: var(--nbbv-muted);
-  --mvp-text-faint: var(--nbbv-muted-2);
-  --mvp-heading: var(--nbbv-navy);
-  --mvp-border: var(--nbbv-line);
-  --mvp-border-strong: var(--nbbv-input-line);
-
-  /* Orange als Akzent, Text darauf Navy (wie .btn-primary) */
-  --mvp-brand: var(--nbbv-orange);
-  --mvp-brand-rgb: 215, 131, 0;
-  --mvp-brand-dark: var(--nbbv-orange);
-  --mvp-brand-soft: var(--nbbv-note-bg);
-  --mvp-on-brand: var(--nbbv-navy);
-
-  /* Blau- und Violett-Akzente des Originals als NBBV-Navy */
-  --mvp-blue: var(--nbbv-navy);
-  --mvp-blue-rgb: 0, 46, 72;
-  --mvp-blue-soft: var(--nbbv-soft-2);
-  --mvp-violet: var(--nbbv-navy);
-  --mvp-violet-soft: var(--nbbv-soft-2);
-
-  /* Status */
-  --mvp-green: var(--nbbv-ok);
-  --mvp-assigned: var(--nbbv-ok);
-  --mvp-green-soft: var(--nbbv-ok-bg);
-  --mvp-danger: var(--nbbv-danger);
-  --mvp-danger-border: rgba(198, 40, 40, 0.35);
-  --mvp-danger-soft: var(--nbbv-danger-bg);
-  --mvp-danger-wash: rgba(198, 40, 40, 0.03);
-
-  /* Flach: Radius 5px, Schatten nur angedeutet (wie .login-box) */
-  --mvp-radius: var(--nbbv-radius);
-  --mvp-radius-small: var(--nbbv-radius);
-  --mvp-shadow: 0 2px 12px rgba(0, 46, 72, 0.08);
-  --mvp-shadow-small: 0 1px 4px rgba(0, 46, 72, 0.06);
-
-  /* Kleine Schrift lesbarer, nie unter 12px (= --nbbv-fs-xs bei 16px Basis) */
-  --mvp-small-text-scale: 1.2;
-  --mvp-small-text-min: 12px;
-
-  background: transparent;
+/* ── Grundschrift wie alle NBBV-Dienste: 16 / 15 / 14 px ─────────────────────
+   Die Ansicht rechnet in rem (--mvp-fs-* in DesignMvpView.vue), daher am html. */
+html {
+  font-size: 16px;
+}
+@media (max-width: 900px) {
+  html { font-size: 15px; }
+}
+@media (max-width: 600px) {
+  html { font-size: 14px; }
 }
 
 /* Glas-Effekte des Originals ergeben auf weißen Flächen keinen Sinn */
@@ -208,20 +165,6 @@ html .design-mvp .mvp-footer-copyright a:hover {
 html .design-mvp :focus-visible {
   outline: 2px solid var(--mvp-brand);
   outline-offset: 2px;
-}
-
-/* ── Schriftstufen wie Meldeportal/SR-Abrechnung: 16 / 15 / 14 px ──────────
-   Umgesetzt über den Faktor für kleine Schrift; die Untergrenze 12px bleibt. */
-@media (max-width: 900px) {
-  html .design-mvp.design-mvp {
-    --mvp-small-text-scale: 1.125;
-  }
-}
-
-@media (max-width: 600px) {
-  html .design-mvp.design-mvp {
-    --mvp-small-text-scale: 1.05;
-  }
 }
 
 /* ── iPhone/iPad: Felder mind. 16px, sonst zoomt Safari beim Antippen hinein ──
