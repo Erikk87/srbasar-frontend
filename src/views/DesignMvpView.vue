@@ -118,17 +118,6 @@
                   {{ quickFilter.id === 'atRisk' ? atRiskCount : lseCount }}
                 </span>
               </button>
-              <button
-                v-if="showBallersClubFilter"
-                class="quick-filter quick-filter--ballers"
-                :class="{ 'is-active': isBallersClubFilterActive }"
-                :aria-pressed="isBallersClubFilterActive"
-                type="button"
-                @click="toggleBallersClubFilter"
-              >
-                <font-awesome-icon :icon="['fas', 'basketball']" aria-hidden="true" />
-                Ballers Club
-              </button>
             </div>
 
             <div v-if="activeFilterLabels.length" class="active-filters" aria-label="Aktive Filter">
@@ -205,8 +194,6 @@
             </div>
           </div>
 
-          <p v-if="ballersState.enabled && !ballersState.available && filters.source !== 'TeamSL'" class="results-meta" role="status">Ballers Club ist vorübergehend nicht verfügbar. Veraltete Turniere werden ausgeblendet.</p>
-          <p v-else-if="ballersState.status === 'stale' && filters.source !== 'TeamSL'" class="results-meta" role="status">Ballers Club: Der letzte bestätigte Stand wird angezeigt. Die Aktualisierung wird erneut versucht.</p>
 
           <div v-if="previewMode === 'loading'" class="skeleton-list" aria-live="polite" aria-label="Spiele werden geladen">
             <article v-for="skeleton in 3" :key="skeleton" class="game-card skeleton-card">
@@ -287,8 +274,7 @@
               <span role="columnheader"><span class="sr-only">Details</span></span>
             </div>
             <template v-for="game in visibleGames" :key="game.id">
-            <BallersClubRow v-if="game.source === 'ballers-club'" :game="game" :column-count="visibleTableColumns.length + 1" :show-distance="Boolean(userLocation)" @open="openBallersGame" />
-            <article v-else
+            <article
               class="game-table-row"
               :class="{ 'game-table-row--at-risk': game.isAtRisk }"
               role="rowgroup"
@@ -352,8 +338,7 @@
 
           <div v-else class="game-list" aria-live="polite">
             <template v-for="game in visibleGames" :key="game.id">
-            <BallersClubCard v-if="game.source === 'ballers-club'" :game="game" :show-distance="Boolean(userLocation)" @open="openBallersGame" />
-            <article v-else
+            <article
               class="game-card"
               :class="{ 'game-card--at-risk': game.isAtRisk }"
               role="button"
@@ -532,7 +517,7 @@
     </div>
 
     <button
-      v-if="!isFilterSheetOpen && !isRadiusPickerOpen && !selectedGame && !selectedBallersGame && !selectedBallersApplicationGame && !isImprintOpen && !isSupportOpen"
+      v-if="!isFilterSheetOpen && !isRadiusPickerOpen && !selectedGame && !isImprintOpen && !isSupportOpen"
       class="mobile-filter-fab"
       type="button"
       @click="isFilterSheetOpen = true"
@@ -922,8 +907,6 @@
       </section>
         </div>
       </div>
-      <BallersClubDetailModal v-if="selectedBallersGame" :game="selectedBallersGame" :available="Boolean(ballersState.available && selectedBallersGame.freeSpots > 0)" @close="selectedBallersGame = null" @request="openBallersApplication" />
-      <BallersClubModal v-if="selectedBallersApplicationGame" :game="selectedBallersApplicationGame" :contact="ballersState.contact" :available="Boolean(ballersState.available && selectedBallersApplicationGame.freeSpots > 0)" :valid-until="new Date(ballersState.updatedAt).getTime() + 15 * 60 * 1000" @close="selectedBallersApplicationGame = null" />
     </Teleport>
   </section>
 </template>
@@ -936,11 +919,6 @@ import RefereeAssignments from '@/components/games/RefereeAssignments.vue'
 import NbbvFooter from '@/components/layout/NbbvFooter.vue'
 import NbbvHeader from '@/components/layout/NbbvHeader.vue'
 import GameRiskBadge from '@/components/games/GameRiskBadge.vue'
-import BallersClubCard from '@/modules/ballersclub/BallersClubCard.vue'
-import BallersClubRow from '@/modules/ballersclub/BallersClubRow.vue'
-import BallersClubModal from '@/modules/ballersclub/BallersClubModal.vue'
-import BallersClubDetailModal from '@/modules/ballersclub/BallersClubDetailModal.vue'
-import { normalizeBallersGame } from '@/modules/ballersclub/contact.js'
 import { getRefereeAssignments, isGameAtRisk } from '@/utils/refereeAssignments.js'
 import {
   formatDistanceKm,
@@ -991,7 +969,6 @@ const quickFilters = [
 const bezirkFilterEnabled = import.meta.env.VITE_ENABLE_BEZIRK_FILTER === 'true'
 
 const filterDefinitions = [
-  { id: 'source', label: 'Quelle', searchLabel: 'Quellen suchen', searchPlaceholder: 'Quelle suchen …' },
   { id: 'date', label: 'Termin', searchLabel: 'Termine suchen', searchPlaceholder: 'Termin suchen …' },
   { id: 'league', label: 'Liga', searchLabel: 'Ligen suchen', searchPlaceholder: 'Liga suchen …' },
   ...(bezirkFilterEnabled ? [{ id: 'district', label: 'Bezirk', searchLabel: 'Bezirke suchen', searchPlaceholder: 'Bezirk suchen …' }] : []),
@@ -1152,9 +1129,6 @@ const isImprintOpen = ref(false)
 const isSupportOpen = ref(false)
 const isGithubTooltipOpen = ref(false)
 const selectedGame = ref(null)
-const selectedBallersGame = ref(null)
-const selectedBallersApplicationGame = ref(null)
-const ballersState = ref({ available: false, contact: null })
 const isRefreshing = ref(false)
 const lastUpdated = ref('wird geladen')
 const AUTO_UPDATE_SECONDS = 30
@@ -1197,8 +1171,6 @@ const hasLseGames = computed(() => (
   lseCount.value > 0
   && (filters.license === defaultFilters.license || isLseFilterActive.value)
 ))
-const showBallersClubFilter = computed(() => Boolean(ballersState.value.available) || filters.source === 'Ballers Club')
-const isBallersClubFilterActive = computed(() => filters.source === 'Ballers Club')
 const visibleQuickFilters = computed(() => quickFilters.filter((filter) => (
   filter.id !== 'atRisk' && filter.id !== 'lse'
     || (filter.id === 'atRisk' && (hasAtRiskGames.value || filters.atRiskOnly))
@@ -1215,7 +1187,6 @@ const filterOptions = computed(() => {
 
   return {
     date: ['Alle Termine', 'Diese Woche', 'Dieses Wochenende', 'Nächste Woche', 'Bestimmtes Datum'],
-    source: ['Alle Quellen', 'TeamSL', ...(showBallersClubFilter.value ? ['Ballers Club'] : [])],
     league: ['Alle Ligen', ...uniqueValues(liveOptions('ligaName', games.map((game) => game.league)))],
     district: ['Alle Bezirke', ...uniqueValues(liveOptions('bezirkName', games.map((game) => game.district)))],
     venue: uniqueValues(liveOptions('spielfeldName', games.map((game) => game.venue))),
@@ -1650,7 +1621,8 @@ function getLiveSortField() {
 
 function getLiveQueryParams() {
   const params = {
-    source: { TeamSL: 'team-sl', 'Ballers Club': 'ballers-club' }[filters.source] || 'all',
+    // NBBV: nur TeamSL-Spiele (Ballers Club wird hier nicht angeboten)
+    source: 'team-sl',
     ...getDateRangeForServer(),
     sortBy: userLocation.value || sortBy.value !== 'distance' ? getLiveSortField() : 'spieldatum',
     sortOrder: sortDirection.value
@@ -1796,7 +1768,7 @@ function normalizeLiveGame(game, index) {
     nearby: Number.isFinite(distanceKm) && distanceKm <= selectedRadiusKm.value,
     accent: getDateAccent(date)
   }
-  return game.source === 'ballers-club' ? normalizeBallersGame(game, normalized) : normalized
+  return normalized
 }
 
 async function loadLiveGames() {
@@ -1824,12 +1796,6 @@ async function loadLiveGames() {
     liveGames.value = sourceGames.map(normalizeLiveGame).filter(Boolean)
     livePagination.value = payload.pagination || { totalItems: sourceGames.length }
     liveAvailableFilters.value = payload.availableFilters || {}
-    ballersState.value = payload.sources?.ballersClub || { available: false, contact: null }
-    for (const selected of [selectedBallersGame, selectedBallersApplicationGame]) {
-      if (!selected.value) continue
-      const updated = liveGames.value.find(game => game.id === selected.value.id)
-      selected.value = updated || { ...selected.value, freeSpots: 0 }
-    }
     if (filters.atRiskOnly && liveAvailableFilters.value.atRiskCount === 0) {
       filters.atRiskOnly = false
     }
@@ -1842,7 +1808,6 @@ async function loadLiveGames() {
   } catch (error) {
     if (requestSequence !== liveRequestSequence) return
     liveApiStatus.value = 'error'
-    ballersState.value = { ...ballersState.value, available: false }
     liveApiError.value = error?.message || 'Die Live-API ist momentan nicht erreichbar.'
     previewMode.value = 'error'
   }
@@ -2049,10 +2014,6 @@ function toggleQuickFilter(filterId) {
   }
 }
 
-function toggleBallersClubFilter() {
-  filters.source = isBallersClubFilterActive.value ? defaultFilters.source : 'Ballers Club'
-}
-
 function removeFilter(filterKey) {
   if (filterKey === 'nearbyOnly') {
     filters.nearbyOnly = false
@@ -2180,18 +2141,7 @@ async function retryPreview() {
 }
 
 function openGame(game) {
-  if (game.source === 'ballers-club') return openBallersGame(game)
   selectedGame.value = game
-}
-
-function openBallersGame(game) {
-  selectedBallersGame.value = game
-}
-
-function openBallersApplication(game) {
-  if (!ballersState.value.available || Number(game?.freeSpots) <= 0) return
-  selectedBallersGame.value = null
-  selectedBallersApplicationGame.value = game
 }
 
 function closeGame() {
@@ -2204,8 +2154,6 @@ function closeOverlays() {
   isImprintOpen.value = false
   isSupportOpen.value = false
   isGithubTooltipOpen.value = false
-  selectedBallersGame.value = null
-  selectedBallersApplicationGame.value = null
   selectedGame.value = null
 }
 
@@ -2837,23 +2785,6 @@ onUnmounted(() => {
 .quick-filter--license {
   color: var(--mvp-blue);
   border-color: rgba(var(--mvp-blue-rgb), 0.35);
-}
-
-.quick-filter--ballers {
-  border-color: rgba(255, 209, 0, 0.42);
-  background: color-mix(in srgb, var(--mvp-yellow, #ffd100) 8%, transparent);
-  color: #9a7600;
-}
-
-.quick-filter--ballers:hover,
-.quick-filter--ballers.is-active {
-  border-color: rgba(255, 209, 0, 0.72);
-  background: color-mix(in srgb, var(--mvp-yellow, #ffd100) 18%, transparent);
-  color: #7a5d00;
-}
-
-.quick-filter--ballers svg {
-  color: #d09f00;
 }
 
 .quick-filter--license:hover,
