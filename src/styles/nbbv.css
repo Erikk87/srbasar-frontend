@@ -29,9 +29,12 @@
     --nbbv-note-line:  #f0d3a3;
     --nbbv-note-text:  #7a4a00;
 
-    /* Schriftgrößen relativ zur Basis (16 / 15 / 14 px je nach Bildschirm) */
-    --nbbv-fs-small:   0.85em;
-    --nbbv-fs-xs:      0.75em;
+    /* Schriftgrößen: Grundschrift 16 / 15 / 14 px je nach Bildschirm (body in components.css),
+       darüber nur diese Stufen. Keine eigenen Zwischengrößen in den Diensten. */
+    --nbbv-fs-small:   0.85em;   /* Hinweise, Labels, Fußzeile, Tabellen im Dashboard */
+    --nbbv-fs-lg:      1.15em;   /* Zwischenüberschriften, Kacheltitel */
+    --nbbv-fs-title:   1.5em;    /* Seitentitel, Einstieg, große Kennzahlen */
+    --nbbv-fs-xs:      0.75em;   /* nur Symbole (▼, ×) */
 
     --nbbv-radius:     5px;
     --nbbv-font:       "Source Sans 3", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;

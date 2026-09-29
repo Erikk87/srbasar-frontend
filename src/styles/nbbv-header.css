@@ -47,20 +47,22 @@
     min-width: 0;
     margin: 0;
     color: var(--nbbv-navy);
-    font-size: 1.5em;
+    font-size: 1em;
     font-weight: 400;
     line-height: 1.2;
     text-align: left;
-    transition: font-size 0.4s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
 .nbbv-header-name {
+    /* Schriftstufen aus nbbv.css: Name „Titel“ (Handy und eingeklappt „groß“), Zusatz „klein“ */
+    font-size: var(--nbbv-fs-title);
     font-weight: 700;
+    transition: font-size 0.4s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
 .nbbv-header-sub {
     color: var(--nbbv-muted);
-    font-size: 0.7em;
+    font-size: var(--nbbv-fs-small);
 }
 
 .nbbv-header-actions {
@@ -83,8 +85,8 @@
     padding-bottom: 6px;
 }
 
-.nbbv-header.is-condensed .nbbv-header-title {
-    font-size: 1.2em;
+.nbbv-header.is-condensed .nbbv-header-name {
+    font-size: var(--nbbv-fs-lg);
 }
 
 /* ── Eingebettet (iFrame auf nbbv.de) ─────────────────────────────────────── */
@@ -109,9 +111,6 @@ html.embedded .nbbv-header-inner {
         --logo-img: 44px;
         --logo-box: 44px;
     }
-    .nbbv-header-title {
-        font-size: 1.35em;
-    }
 }
 
 @media (max-width: 600px) {
@@ -131,7 +130,9 @@ html.embedded .nbbv-header-inner {
     .nbbv-header-title {
         /* neben dem Logo bleiben und dort umbrechen statt in eine eigene Zeile zu rutschen */
         flex: 1 1 0;
-        font-size: 1.25em;
+    }
+    .nbbv-header-name {
+        font-size: var(--nbbv-fs-lg);
     }
     .nbbv-header-actions {
         margin-left: 0;

@@ -125,6 +125,23 @@ html .design-mvp .search-input:hover {
   border-color: var(--mvp-heading);
 }
 
+/* „x“ in den Suchfeldern wie in den anderen Diensten (shared/components.css .clear-btn):
+   dezent grau, beim Überfahren Navy; eingebautes „x“ der Browser ausblenden, sonst stehen zwei da */
+html .design-mvp input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+html .design-mvp .clear-search,
+html .design-mvp .filter-dropdown-search button {
+  background: transparent;
+  color: var(--nbbv-muted-2);
+}
+html .design-mvp .clear-search:hover,
+html .design-mvp .filter-dropdown-search button:hover {
+  background: var(--nbbv-soft-2);
+  color: var(--nbbv-navy);
+}
+
 /* ── Buttons nach Rolle (components.css): andere Aktionen Navy ────────────── */
 html .design-mvp .secondary-action,
 html .design-mvp .filter-button {
@@ -207,12 +224,12 @@ html .design-mvp :focus-visible {
   }
 }
 
-/* ── Smartphone ───────────────────────────────────────────────────────────── */
-@media (max-width: 600px) {
-  /* Eingabefelder mind. 16px, sonst zoomt iOS beim Antippen hinein */
+/* ── iPhone/iPad: Felder mind. 16px, sonst zoomt Safari beim Antippen hinein ──
+   Wie shared/components.css in nbbv-webservices; -webkit-touch-callout gibt es nur in Safari auf iOS. */
+@supports (-webkit-touch-callout: none) {
   html .design-mvp input:not([type="checkbox"]):not([type="radio"]),
   html .design-mvp select,
   html .design-mvp textarea {
-    font-size: 16px;
+    font-size: max(16px, 1em) !important;
   }
 }
