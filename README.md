@@ -12,7 +12,12 @@
 > - **Branches:** `dev` → Dev, `main` → Prod. Auf `main` nur per PR von `dev`.
 > - **NBBV-eigene Dateien:** `.env.strato`, `src/components/layout/NbbvHeader.vue` und `NbbvFooter.vue`,
 >   `src/styles/brand-nbbv.css`, `src/styles/nbbv.css` und `nbbv-header.css` (Kopien aus nbbv-webservices `shared/`,
->   bei Änderungen dort nachziehen). Anpassungen möglichst über `VITE_*`-Variablen, damit Upstream-Merges einfach bleiben.
+>   bei Änderungen dort nachziehen).
+> - **Abweichung vom Original (seit 2026-09-29):** Die Ansicht `DesignMvpView.vue` ist NBBV-eigen: Farben und
+>   Formen aus den NBBV-Tokens, fünf Schriftstufen (`--mvp-fs-*`, Grundschrift 16/15/14 px am `html`), nur helles
+>   Design, kein Ballers Club, kein Quellen-Filter (nur TeamSL). Neues aus `upstream` wird **nicht gemergt**, sondern
+>   bei Bedarf gezielt übernommen: Funktionen (`services/`, `utils/`, `stores/`, Logik in Komponenten) per Hand oder
+>   `git cherry-pick`, Design-Änderungen nicht.
 > - **Texte:** „Spielebörse“, „Schiedsrichter:innen“, „Team“, Du-Form. Kontakt support@nbbv.de.
 >
 > Ab hier folgt die README des Originalprojekts. Server, Domains und Deploy darin gelten nicht für den NBBV-Betrieb.

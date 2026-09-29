@@ -40,7 +40,7 @@ const infoUrl = import.meta.env.VITE_INFO_URL || ''
   margin-top: 24px;
   padding: 10px;
   color: var(--nbbv-muted);
-  font-size: 0.85rem;           /* entspricht --nbbv-fs-small bei 16px Basis */
+  font-size: var(--mvp-fs-small, 0.85rem);   /* Stufe „klein“ wie in den anderen Diensten */
   line-height: 1.35;
   text-align: center;
 }
@@ -63,7 +63,6 @@ const infoUrl = import.meta.env.VITE_INFO_URL || ''
 
 .nbbv-footer-credit {
   color: var(--nbbv-muted-2);
-  font-size: 0.9em;
 }
 
 .nbbv-footer-credit a {
