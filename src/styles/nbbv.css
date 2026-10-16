@@ -39,3 +39,7 @@
     --nbbv-radius:     5px;
     --nbbv-font:       "Source Sans 3", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
+
+/* Platz für die Scrollleiste immer freihalten: Wird eine Seite beim Benutzen länger oder kürzer als das Fenster
+   (Inhalte laden nach, Bereiche klappen auf, Pop-up sperrt das Scrollen), springen sonst Breite und Seitenkopf */
+:root { scrollbar-gutter: stable; }
